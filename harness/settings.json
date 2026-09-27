@@ -1,0 +1,15 @@
+{
+ "disableAllHooks": true,
+ "enabledPlugins": {
+  "prisma@claude-plugins-official": false,
+  "daily.dev@daily.dev": false,
+  "superpowers@claude-plugins-official": false,
+  "expo@claude-plugins-official": false,
+  "ralph-loop@claude-plugins-official": false,
+  "frontend-design@claude-plugins-official": false,
+  "understand-anything@understand-anything": false,
+  "ui-ux-pro-max@ui-ux-pro-max-skill": false,
+  "vercel@claude-plugins-official": false
+ },
+ "includeCoAuthoredBy": false
+}

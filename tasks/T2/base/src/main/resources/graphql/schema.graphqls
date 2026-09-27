@@ -1,0 +1,48 @@
+type Query {
+    order(id: ID!): Order
+    orders(first: Int, after: String, last: Int, before: String): OrderConnection!
+}
+
+type Mutation {
+    shipOrder(id: ID!): Order!
+}
+
+type Subscription {
+    orderStatus(orderId: ID!): Order!
+}
+
+type Order {
+    id: ID!
+    status: OrderStatus!
+    total: Int! @deprecated(reason: "Renamed to amount")
+    amount: Int!
+    placedAt: String!
+    customer: Customer!
+    lines: [OrderLine!]!
+}
+
+type OrderLine {
+    quantity: Int!
+    unitPrice: Int!
+    item: Item!
+}
+
+type Item {
+    code: ID!
+    name: String!
+    description: String!
+    price: Int!
+}
+
+type Customer {
+    id: ID!
+    name: String!
+    tier: String!
+    email: String
+}
+
+enum OrderStatus {
+    PLACED
+    PAID
+    SHIPPED
+}

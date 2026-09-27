@@ -1,0 +1,41 @@
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.9", import: ["@key"])
+
+type Query {
+    order(id: ID!): Order
+    ordersByCustomer(customerId: ID!): [Order!]!
+}
+
+type Mutation {
+    placeOrder(input: PlaceOrderInput!): Order!
+}
+
+type Order @key(fields: "id") {
+    id: ID!
+    customerId: ID!
+    currency: String!
+    total: Int!
+    status: OrderStatus!
+    lines: [OrderLine!]!
+}
+
+type OrderLine {
+    sku: String!
+    quantity: Int!
+    unitPrice: Int!
+}
+
+enum OrderStatus {
+    PLACED
+    PAID
+}
+
+input PlaceOrderInput {
+    customerId: ID!
+    currency: String!
+    lines: [LineInput!]!
+}
+
+input LineInput {
+    sku: String!
+    quantity: Int!
+}
