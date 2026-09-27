@@ -1,0 +1,57 @@
+{
+ "task": "T1",
+ "model": "claude-fable-5-1",
+ "repeat": 1,
+ "order_in_repeat": 3,
+ "workdir": "/private/tmp/opus-runs/T1-claude-fable-5-1-r1-1790508707",
+ "timed_out": false,
+ "result_subtype": "success",
+ "wall_s": 88.4,
+ "claude_duration_s": 85.5,
+ "num_turns": 19,
+ "tool_calls": 18,
+ "tool_calls_by_name": {
+  "Bash": 3,
+  "Read": 7,
+  "Edit": 8
+ },
+ "permission_denials": 0,
+ "possible_leak": [],
+ "checks": {
+  "normalised": true,
+  "empty_array": true,
+  "rejects_two_letters": true,
+  "rejects_symbol": true,
+  "regression_and_vet": true,
+  "parameterised_sql": true,
+  "limit_50": true,
+  "route_registered": true
+ },
+ "checks_passed": 8,
+ "checks_total": 8,
+ "all_passed": true,
+ "cost": {
+  "by_model": {
+   "claude-fable-5-1": {
+    "uncached_input": 162,
+    "cache_write_5m": 0,
+    "cache_write_1h": 20410,
+    "cache_read": 77975,
+    "output": 7787,
+    "calculated_usd": 0.81866375
+   }
+  },
+  "calculated_usd": 0.8187,
+  "claude_code_total_cost_usd": 0.8186637500000001
+ },
+ "checks_original": {
+  "normalised": true,
+  "empty_array": true,
+  "rejects_two_letters": true,
+  "rejects_symbol": true,
+  "regression_and_vet": true,
+  "parameterised_sql": true,
+  "limit_50": true,
+  "route_registered": true
+ }
+}

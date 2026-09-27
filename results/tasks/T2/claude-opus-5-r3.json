@@ -1,0 +1,58 @@
+{
+ "task": "T2",
+ "model": "claude-opus-5",
+ "repeat": 3,
+ "order_in_repeat": 3,
+ "workdir": "/private/tmp/opus-runs/T2-claude-opus-5-r3-1790512166",
+ "timed_out": false,
+ "result_subtype": "success",
+ "wall_s": 520.6,
+ "claude_duration_s": 518.6,
+ "num_turns": 62,
+ "tool_calls": 61,
+ "tool_calls_by_name": {
+  "Bash": 25,
+  "Read": 12,
+  "Edit": 21,
+  "Write": 3
+ },
+ "permission_denials": 0,
+ "possible_leak": [],
+ "checks": {
+  "orderCountIsCorrect": true,
+  "orderCountIsBatched": true,
+  "firstPageOfOneCustomer": true,
+  "nextPageContinuesFromTheCursor": true,
+  "defaultPageIsTen": true,
+  "unknownCustomerIsNotFound": true,
+  "nestedFieldsStayBatched": true,
+  "regression": true
+ },
+ "checks_passed": 8,
+ "checks_total": 8,
+ "all_passed": true,
+ "cost": {
+  "by_model": {
+   "claude-opus-5": {
+    "uncached_input": 98,
+    "cache_write_5m": 0,
+    "cache_write_1h": 62127,
+    "cache_read": 1894141,
+    "output": 31892,
+    "calculated_usd": 2.3661305
+   }
+  },
+  "calculated_usd": 2.3661,
+  "claude_code_total_cost_usd": 2.3661305
+ },
+ "checks_original": {
+  "orderCountIsCorrect": true,
+  "orderCountIsBatched": true,
+  "firstPageOfOneCustomer": true,
+  "nextPageContinuesFromTheCursor": true,
+  "defaultPageIsTen": true,
+  "unknownCustomerIsNotFound": true,
+  "nestedFieldsStayBatched": true,
+  "regression": true
+ }
+}

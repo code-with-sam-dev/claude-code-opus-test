@@ -1,0 +1,928 @@
+diff --git a/cp.txt b/cp.txt
+new file mode 100644
+index 0000000..f9987cc
+--- /dev/null
++++ b/cp.txt
+@@ -0,0 +1 @@
++/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-kafka/4.1.1/spring-boot-starter-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-kafka/4.1.1/spring-boot-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka/4.1.1/spring-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/com/apollographql/federation/federation-graphql-java-support/6.2.1/federation-graphql-java-support-6.2.1.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/com/google/protobuf/protobuf-java/4.35.1/protobuf-java-4.35.1.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka-test/4.1.1/spring-kafka-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1-test.jar:/Users/developer/.m2/repository/com/github/luben/zstd-jni/1.5.6-10/zstd-jni-1.5.6-10.jar:/Users/developer/.m2/repository/at/yawk/lz4/lz4-java/1.10.1/lz4-java-1.10.1.jar:/Users/developer/.m2/repository/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server/4.2.1/kafka-server-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage/4.2.1/kafka-storage-4.2.1.jar:/Users/developer/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator/4.2.1/kafka-group-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator-api/4.2.1/kafka-group-coordinator-api-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-coordinator-common/4.2.1/kafka-coordinator-common-4.2.1.jar:/Users/developer/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/Users/developer/.m2/repository/com/google/re2j/re2j/1.8/re2j-1.8.jar:/Users/developer/.m2/repository/com/dynatrace/hash4j/hash4j/0.22.0/hash4j-0.22.0.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-transaction-coordinator/4.2.1/kafka-transaction-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-raft/4.2.1/kafka-raft-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-share-coordinator/4.2.1/kafka-share-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage-api/4.2.1/kafka-storage-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.5/jackson-databind-2.21.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.5/jackson-core-2.21.5.jar:/Users/developer/.m2/repository/com/yammer/metrics/metrics-core/2.2.0/metrics-core-2.2.0.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-core/2.25.5/log4j-core-2.25.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-runtime/4.2.1/kafka-test-common-runtime-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka_2.13/4.2.1/kafka_2.13-4.2.1.jar:/Users/developer/.m2/repository/org/scala-lang/scala-library/2.13.17/scala-library-2.13.17.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-tools-api/4.2.1/kafka-tools-api-4.2.1.jar:/Users/developer/.m2/repository/net/sourceforge/argparse4j/argparse4j/0.7.0/argparse4j-0.7.0.jar:/Users/developer/.m2/repository/commons-validator/commons-validator/1.10.1/commons-validator-1.10.1.jar:/Users/developer/.m2/repository/commons-beanutils/commons-beanutils/1.11.0/commons-beanutils-1.11.0.jar:/Users/developer/.m2/repository/commons-digester/commons-digester/2.1/commons-digester-2.1.jar:/Users/developer/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-csv/2.21.5/jackson-dataformat-csv-2.21.5.jar:/Users/developer/.m2/repository/org/bitbucket/b_c/jose4j/0.9.6/jose4j-0.9.6.jar:/Users/developer/.m2/repository/org/scala-lang/scala-reflect/2.13.17/scala-reflect-2.13.17.jar:/Users/developer/.m2/repository/com/typesafe/scala-logging/scala-logging_2.13/3.9.6/scala-logging_2.13-3.9.6.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-internal-api/4.2.1/kafka-test-common-internal-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.21.5/jackson-dataformat-yaml-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-metadata/4.2.1/kafka-metadata-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.21.5/jackson-datatype-jdk8-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1.jar:/Users/developer/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/Users/developer/.m2/repository/org/pcollections/pcollections/4.0.2/pcollections-4.0.2.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1-test.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams-test-utils/4.2.1/kafka-streams-test-utils-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams/4.2.1/kafka-streams-4.2.1.jar:/Users/developer/.m2/repository/org/rocksdb/rocksdbjni/10.1.3/rocksdbjni-10.1.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-launcher/6.0.3/junit-platform-launcher-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar
+\ No newline at end of file
+diff --git a/pom.xml b/pom.xml
+index b7cb147..8eff69b 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -59,6 +59,11 @@
+ 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+ 			<scope>test</scope>
+ 		</dependency>
++		<dependency>
++			<groupId>org.springframework.kafka</groupId>
++			<artifactId>spring-kafka-test</artifactId>
++			<scope>test</scope>
++		</dependency>
+ 	</dependencies>
+ 
+ 	<build>
+diff --git a/src/main/java/dev/example/orders/KafkaErrorHandlingConfig.java b/src/main/java/dev/example/orders/KafkaErrorHandlingConfig.java
+new file mode 100644
+index 0000000..e2ecfe4
+--- /dev/null
++++ b/src/main/java/dev/example/orders/KafkaErrorHandlingConfig.java
+@@ -0,0 +1,38 @@
++package dev.example.orders;
++
++import org.apache.kafka.common.TopicPartition;
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.Configuration;
++import org.springframework.kafka.core.KafkaTemplate;
++import org.springframework.kafka.listener.DefaultErrorHandler;
++import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
++import org.springframework.util.backoff.FixedBackOff;
++import tools.jackson.core.JacksonException;
++
++@Configuration
++public class KafkaErrorHandlingConfig {
++
++    // One attempt plus MAX_RETRIES more, RETRY_INTERVAL apart.
++    static final long RETRY_INTERVAL = 200L;
++    static final long MAX_RETRIES = 3L;
++
++    // Spelled out because the recoverer's own default is "-dlt".
++    static final String DLT_SUFFIX = ".DLT";
++
++    /*
++     * Transient failures get a few spaced out attempts; failures that cannot get
++     * better - a message we cannot parse, an order that does not exist - go
++     * straight to the dead letter topic. Either way the record ends up on
++     * <topic>.DLT with its original value and the container moves on.
++     */
++    @Bean
++    DefaultErrorHandler kafkaErrorHandler(KafkaTemplate<?, ?> template) {
++        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(template,
++                (record, exception) ->
++                        new TopicPartition(record.topic() + DLT_SUFFIX, record.partition()));
++        DefaultErrorHandler handler = new DefaultErrorHandler(recoverer,
++                new FixedBackOff(RETRY_INTERVAL, MAX_RETRIES));
++        handler.addNotRetryableExceptions(JacksonException.class, OrderNotFoundException.class);
++        return handler;
++    }
++}
+diff --git a/src/main/java/dev/example/orders/OrderNotFoundException.java b/src/main/java/dev/example/orders/OrderNotFoundException.java
+new file mode 100644
+index 0000000..8cfd58a
+--- /dev/null
++++ b/src/main/java/dev/example/orders/OrderNotFoundException.java
+@@ -0,0 +1,9 @@
++package dev.example.orders;
++
++// No amount of retrying makes the order appear, so this is a dead letter.
++public class OrderNotFoundException extends RuntimeException {
++
++    public OrderNotFoundException(String orderId) {
++        super("No order " + orderId);
++    }
++}
+diff --git a/src/main/java/dev/example/orders/OrderService.java b/src/main/java/dev/example/orders/OrderService.java
+index d98334d..9af09f4 100644
+--- a/src/main/java/dev/example/orders/OrderService.java
++++ b/src/main/java/dev/example/orders/OrderService.java
+@@ -47,8 +47,7 @@ public class OrderService {
+     @Transactional
+     public void markPaid(PaymentSettled event) {
+         Order order = orders.findById(Long.valueOf(event.orderId()))
+-                .orElseThrow(() ->
+-                        new IllegalStateException("No order " + event.orderId()));
++                .orElseThrow(() -> new OrderNotFoundException(event.orderId()));
+         order.markPaid();
+     }
+ }
+diff --git a/src/test/java/dev/example/orders/OrderServiceMarkPaidTest.java b/src/test/java/dev/example/orders/OrderServiceMarkPaidTest.java
+new file mode 100644
+index 0000000..23fec6b
+--- /dev/null
++++ b/src/test/java/dev/example/orders/OrderServiceMarkPaidTest.java
+@@ -0,0 +1,37 @@
++package dev.example.orders;
++
++import static org.assertj.core.api.Assertions.assertThat;
++import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
++import static org.mockito.Mockito.mock;
++import static org.mockito.Mockito.when;
++
++import java.util.Optional;
++import org.junit.jupiter.api.Test;
++import tools.jackson.databind.json.JsonMapper;
++
++class OrderServiceMarkPaidTest {
++
++    private final OrderRepository orders = mock(OrderRepository.class);
++    private final OrderService service = new OrderService(orders,
++            mock(OrderLineRepository.class), mock(OutboxRepository.class),
++            mock(Catalog.class), JsonMapper.builder().build());
++
++    @Test
++    void marksAKnownOrderAsPaid() {
++        Order order = new Order("cust-1", "EUR", 2500);
++        when(orders.findById(7L)).thenReturn(Optional.of(order));
++
++        service.markPaid(new PaymentSettled("7", "pay-7", 2500));
++
++        assertThat(order.getStatus()).isEqualTo(OrderStatus.PAID);
++    }
++
++    @Test
++    void rejectsAPaymentForAnOrderThatDoesNotExist() {
++        when(orders.findById(4040L)).thenReturn(Optional.empty());
++
++        assertThatExceptionOfType(OrderNotFoundException.class)
++                .isThrownBy(() -> service.markPaid(new PaymentSettled("4040", "pay-4040", 100)))
++                .withMessageContaining("4040");
++    }
++}
+diff --git a/src/test/java/dev/example/orders/PaymentSettledListenerTest.java b/src/test/java/dev/example/orders/PaymentSettledListenerTest.java
+new file mode 100644
+index 0000000..05d1f02
+--- /dev/null
++++ b/src/test/java/dev/example/orders/PaymentSettledListenerTest.java
+@@ -0,0 +1,281 @@
++package dev.example.orders;
++
++import static org.assertj.core.api.Assertions.assertThat;
++import static org.mockito.ArgumentMatchers.any;
++import static org.mockito.Mockito.doAnswer;
++import static org.mockito.Mockito.mock;
++import static org.mockito.Mockito.reset;
++import static org.mockito.Mockito.verify;
++
++import java.time.Duration;
++import java.util.List;
++import java.util.Map;
++import java.util.UUID;
++import java.util.concurrent.CopyOnWriteArrayList;
++import java.util.concurrent.ExecutionException;
++import java.util.concurrent.TimeUnit;
++import java.util.concurrent.TimeoutException;
++import java.util.function.BooleanSupplier;
++import org.apache.kafka.clients.consumer.Consumer;
++import org.apache.kafka.clients.consumer.ConsumerConfig;
++import org.apache.kafka.clients.consumer.ConsumerRecord;
++import org.apache.kafka.clients.consumer.ConsumerRecords;
++import org.apache.kafka.common.TopicPartition;
++import org.apache.kafka.common.serialization.StringDeserializer;
++import org.junit.jupiter.api.AfterEach;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++import org.mockito.ArgumentCaptor;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
++import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
++import org.springframework.boot.kafka.autoconfigure.KafkaAutoConfiguration;
++import org.springframework.boot.test.context.SpringBootTest;
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.Configuration;
++import org.springframework.context.annotation.Import;
++import org.springframework.dao.TransientDataAccessResourceException;
++import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
++import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
++import org.springframework.kafka.core.KafkaTemplate;
++import org.springframework.kafka.listener.MessageListenerContainer;
++import org.springframework.kafka.test.EmbeddedKafkaBroker;
++import org.springframework.kafka.test.context.EmbeddedKafka;
++import org.springframework.kafka.test.utils.ContainerTestUtils;
++
++/*
++ * The listener, its error handler and a real broker, with OrderService mocked so a
++ * test can decide how markPaid fails. No database is involved: the context holds
++ * only Jackson, Kafka and the listener.
++ */
++@SpringBootTest(classes = PaymentSettledListenerTest.ListenerOnlyApp.class,
++        properties = {
++                "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
++                "spring.kafka.consumer.auto-offset-reset=earliest"
++        })
++@EmbeddedKafka(topics = { PaymentSettledListenerTest.TOPIC, PaymentSettledListenerTest.DLT },
++        partitions = 1)
++class PaymentSettledListenerTest {
++
++    static final String TOPIC = "payment-settled";
++    static final String DLT = "payment-settled.DLT";
++
++    private static final Duration POLL_TIMEOUT = Duration.ofSeconds(15);
++
++    @Configuration
++    @ImportAutoConfiguration({ JacksonAutoConfiguration.class, KafkaAutoConfiguration.class })
++    @Import({ PaymentSettledListener.class, KafkaErrorHandlingConfig.class })
++    static class ListenerOnlyApp {
++
++        @Bean
++        OrderService orders() {
++            return mock(OrderService.class);
++        }
++    }
++
++    @Autowired
++    private OrderService orders;
++
++    @Autowired
++    private KafkaTemplate<String, String> template;
++
++    @Autowired
++    private KafkaListenerEndpointRegistry registry;
++
++    @Autowired
++    private EmbeddedKafkaBroker broker;
++
++    private Consumer<String, String> deadLetters;
++
++    @BeforeEach
++    void setUp() {
++        reset(orders);
++        for (MessageListenerContainer container : registry.getListenerContainers()) {
++            ContainerTestUtils.waitForAssignment(container, 1);
++        }
++        // Start reading the dead letter topic where this test begins, so records
++        // left behind by earlier tests are not picked up.
++        deadLetters = dltConsumer();
++    }
++
++    @AfterEach
++    void tearDown() {
++        deadLetters.close();
++    }
++
++    @Test
++    void transientFailureIsRetriedWithBackoffAndThenDeadLettered() {
++        List<Long> attempts = failMarkPaidWith(new TransientDataAccessResourceException("db busy"));
++        String message = """
++                {"orderId":"41","paymentId":"pay-41","amount":1500}""";
++
++        send(message);
++        ConsumerRecord<String, String> dead = nextDeadLetter();
++        long finishedAt = System.nanoTime();
++
++        assertThat(dead.value()).isEqualTo(message);
++        assertThat(attempts).hasSize(4);
++        for (int i = 1; i < attempts.size(); i++) {
++            assertThat(Duration.ofNanos(attempts.get(i) - attempts.get(i - 1)))
++                    .as("pause before attempt %d", i + 1)
++                    .isGreaterThanOrEqualTo(Duration.ofMillis(100));
++        }
++        assertThat(Duration.ofNanos(finishedAt - attempts.get(0)))
++                .as("time from first attempt to dead letter")
++                .isLessThan(Duration.ofSeconds(5));
++
++        // And it stays at four attempts once the record has been dead lettered.
++        assertThat(stays(() -> attempts.size() == 4)).isTrue();
++    }
++
++    @Test
++    void unparseableMessageIsDeadLetteredWithoutRetrying() {
++        List<Long> attempts = failMarkPaidWith(new TransientDataAccessResourceException("db busy"));
++        String message = "this is not json";
++
++        send(message);
++        ConsumerRecord<String, String> dead = nextDeadLetter();
++
++        assertThat(dead.value()).isEqualTo(message);
++        assertThat(attempts).as("markPaid is never reached for an unparseable record").isEmpty();
++    }
++
++    @Test
++    void unknownOrderIsDeadLetteredWithoutRetrying() {
++        List<Long> attempts = failMarkPaidWith(new OrderNotFoundException("4040"));
++        String message = """
++                {"orderId":"4040","paymentId":"pay-4040","amount":900}""";
++
++        send(message);
++        ConsumerRecord<String, String> dead = nextDeadLetter();
++
++        assertThat(dead.value()).isEqualTo(message);
++        assertThat(attempts).hasSize(1);
++        assertThat(stays(() -> attempts.size() == 1)).isTrue();
++    }
++
++    @Test
++    void settledPaymentIsHandedToOrderService() {
++        send("""
++                {"orderId":"7","paymentId":"pay-7","amount":2500}""");
++
++        ArgumentCaptor<PaymentSettled> captor = ArgumentCaptor.forClass(PaymentSettled.class);
++        waitFor(() -> {
++            verify(orders).markPaid(captor.capture());
++            return true;
++        });
++        assertThat(captor.getValue())
++                .isEqualTo(new PaymentSettled("7", "pay-7", 2500L));
++        assertThat(deadLetters.poll(Duration.ofSeconds(1)).isEmpty())
++                .as("nothing is dead lettered")
++                .isTrue();
++    }
++
++    /*
++     * The listener carries on with the next record after a failure: a record that is
++     * dead lettered does not stop the one behind it from being processed.
++     */
++    @Test
++    void consumerCarriesOnAfterADeadLetteredRecord() {
++        failMarkPaidWith(new OrderNotFoundException("5050"));
++
++        send("""
++                {"orderId":"5050","paymentId":"pay-5050","amount":100}""");
++        nextDeadLetter();
++
++        reset(orders);
++        send("""
++                {"orderId":"8","paymentId":"pay-8","amount":300}""");
++        waitFor(() -> {
++            verify(orders).markPaid(new PaymentSettled("8", "pay-8", 300L));
++            return true;
++        });
++    }
++
++    /* Publishes to payment-settled and waits for the broker to acknowledge it. */
++    private void send(String value) {
++        try {
++            template.send(TOPIC, value).get(30, TimeUnit.SECONDS);
++        }
++        catch (InterruptedException ex) {
++            Thread.currentThread().interrupt();
++            throw new IllegalStateException(ex);
++        }
++        catch (ExecutionException | TimeoutException ex) {
++            throw new IllegalStateException("could not publish to " + TOPIC, ex);
++        }
++    }
++
++    /* Makes markPaid throw, and hands back the timestamp of every call it receives. */
++    private List<Long> failMarkPaidWith(RuntimeException failure) {
++        List<Long> attempts = new CopyOnWriteArrayList<>();
++        doAnswer(invocation -> {
++            attempts.add(System.nanoTime());
++            throw failure;
++        }).when(orders).markPaid(any());
++        return attempts;
++    }
++
++    private ConsumerRecord<String, String> nextDeadLetter() {
++        ConsumerRecords<String, String> records = deadLetters.poll(POLL_TIMEOUT);
++        assertThat(records.count()).as("records on %s", DLT).isEqualTo(1);
++        return records.iterator().next();
++    }
++
++    private Consumer<String, String> dltConsumer() {
++        Map<String, Object> props = Map.of(
++                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, broker.getBrokersAsString(),
++                ConsumerConfig.GROUP_ID_CONFIG, "dlt-probe-" + UUID.randomUUID(),
++                ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false,
++                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
++                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
++        Consumer<String, String> consumer =
++                new DefaultKafkaConsumerFactory<String, String>(props).createConsumer();
++        TopicPartition partition = new TopicPartition(DLT, 0);
++        consumer.assign(List.of(partition));
++        consumer.seekToEnd(List.of(partition));
++        consumer.position(partition);
++        return consumer;
++    }
++
++    /* Waits up to POLL_TIMEOUT for the condition, retrying whatever it throws. */
++    private void waitFor(BooleanSupplier condition) {
++        long deadline = System.nanoTime() + POLL_TIMEOUT.toNanos();
++        Throwable last = null;
++        while (System.nanoTime() < deadline) {
++            try {
++                if (condition.getAsBoolean()) {
++                    return;
++                }
++                last = null;
++            }
++            catch (AssertionError | RuntimeException ex) {
++                last = ex;
++            }
++            sleep(50);
++        }
++        if (last instanceof AssertionError error) {
++            throw error;
++        }
++        if (last instanceof RuntimeException ex) {
++            throw ex;
++        }
++        throw new AssertionError("condition was not met within " + POLL_TIMEOUT);
++    }
++
++    /* True if the condition still holds half a second from now. */
++    private boolean stays(BooleanSupplier condition) {
++        sleep(500);
++        return condition.getAsBoolean();
++    }
++
++    private void sleep(long millis) {
++        try {
++            Thread.sleep(millis);
++        }
++        catch (InterruptedException ex) {
++            Thread.currentThread().interrupt();
++            throw new IllegalStateException(ex);
++        }
++    }
++}
+diff --git a/src/test/resources/logback-test.xml b/src/test/resources/logback-test.xml
+new file mode 100644
+index 0000000..5f35503
+--- /dev/null
++++ b/src/test/resources/logback-test.xml
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<configuration>
++	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
++	<include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
++
++	<!-- The embedded broker is very chatty; keep the test output readable. -->
++	<logger name="kafka" level="WARN"/>
++	<logger name="org.apache.kafka" level="WARN"/>
++	<logger name="state.change.logger" level="WARN"/>
++
++	<root level="INFO">
++		<appender-ref ref="CONSOLE"/>
++	</root>
++</configuration>
+diff --git a/target/classes/application.properties b/target/classes/application.properties
+new file mode 100644
+index 0000000..c3abbeb
+--- /dev/null
++++ b/target/classes/application.properties
+@@ -0,0 +1,13 @@
++spring.application.name=orders
++server.port=8101
++
++spring.datasource.url=jdbc:postgresql://localhost:${POSTGRES_PORT:5440}/orders
++spring.datasource.username=orders
++spring.datasource.password=orders
++spring.jpa.hibernate.ddl-auto=update
++spring.jpa.open-in-view=false
++
++spring.graphql.http.path=/graphql
++
++spring.kafka.bootstrap-servers=localhost:9094
++spring.kafka.consumer.auto-offset-reset=earliest
+diff --git a/target/classes/dev/example/orders/Catalog.class b/target/classes/dev/example/orders/Catalog.class
+new file mode 100644
+index 0000000..4ef6fea
+Binary files /dev/null and b/target/classes/dev/example/orders/Catalog.class differ
+diff --git a/target/classes/dev/example/orders/FederationConfig.class b/target/classes/dev/example/orders/FederationConfig.class
+new file mode 100644
+index 0000000..8f81c8d
+Binary files /dev/null and b/target/classes/dev/example/orders/FederationConfig.class differ
+diff --git a/target/classes/dev/example/orders/GraphQlLimits.class b/target/classes/dev/example/orders/GraphQlLimits.class
+new file mode 100644
+index 0000000..28c0bc4
+Binary files /dev/null and b/target/classes/dev/example/orders/GraphQlLimits.class differ
+diff --git a/target/classes/dev/example/orders/KafkaErrorHandlingConfig.class b/target/classes/dev/example/orders/KafkaErrorHandlingConfig.class
+new file mode 100644
+index 0000000..240ffa4
+Binary files /dev/null and b/target/classes/dev/example/orders/KafkaErrorHandlingConfig.class differ
+diff --git a/target/classes/dev/example/orders/Order.class b/target/classes/dev/example/orders/Order.class
+new file mode 100644
+index 0000000..dc7a0a9
+Binary files /dev/null and b/target/classes/dev/example/orders/Order.class differ
+diff --git a/target/classes/dev/example/orders/OrderController.class b/target/classes/dev/example/orders/OrderController.class
+new file mode 100644
+index 0000000..c095aa7
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderController.class differ
+diff --git a/target/classes/dev/example/orders/OrderLine.class b/target/classes/dev/example/orders/OrderLine.class
+new file mode 100644
+index 0000000..9f1c57b
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderLine.class differ
+diff --git a/target/classes/dev/example/orders/OrderLineRepository.class b/target/classes/dev/example/orders/OrderLineRepository.class
+new file mode 100644
+index 0000000..70977e9
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderLineRepository.class differ
+diff --git a/target/classes/dev/example/orders/OrderNotFoundException.class b/target/classes/dev/example/orders/OrderNotFoundException.class
+new file mode 100644
+index 0000000..1f29972
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderNotFoundException.class differ
+diff --git a/target/classes/dev/example/orders/OrderPlaced.class b/target/classes/dev/example/orders/OrderPlaced.class
+new file mode 100644
+index 0000000..c573393
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderPlaced.class differ
+diff --git a/target/classes/dev/example/orders/OrderRepository.class b/target/classes/dev/example/orders/OrderRepository.class
+new file mode 100644
+index 0000000..89e1c25
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderRepository.class differ
+diff --git a/target/classes/dev/example/orders/OrderService.class b/target/classes/dev/example/orders/OrderService.class
+new file mode 100644
+index 0000000..9389232
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderService.class differ
+diff --git a/target/classes/dev/example/orders/OrderStatus.class b/target/classes/dev/example/orders/OrderStatus.class
+new file mode 100644
+index 0000000..7292119
+Binary files /dev/null and b/target/classes/dev/example/orders/OrderStatus.class differ
+diff --git a/target/classes/dev/example/orders/OrdersApplication.class b/target/classes/dev/example/orders/OrdersApplication.class
+new file mode 100644
+index 0000000..5ebc96e
+Binary files /dev/null and b/target/classes/dev/example/orders/OrdersApplication.class differ
+diff --git a/target/classes/dev/example/orders/OutboxEvent.class b/target/classes/dev/example/orders/OutboxEvent.class
+new file mode 100644
+index 0000000..0b0d82d
+Binary files /dev/null and b/target/classes/dev/example/orders/OutboxEvent.class differ
+diff --git a/target/classes/dev/example/orders/OutboxRelay.class b/target/classes/dev/example/orders/OutboxRelay.class
+new file mode 100644
+index 0000000..3eceb91
+Binary files /dev/null and b/target/classes/dev/example/orders/OutboxRelay.class differ
+diff --git a/target/classes/dev/example/orders/OutboxRepository.class b/target/classes/dev/example/orders/OutboxRepository.class
+new file mode 100644
+index 0000000..bb657cd
+Binary files /dev/null and b/target/classes/dev/example/orders/OutboxRepository.class differ
+diff --git a/target/classes/dev/example/orders/PaymentSettled.class b/target/classes/dev/example/orders/PaymentSettled.class
+new file mode 100644
+index 0000000..fe1febc
+Binary files /dev/null and b/target/classes/dev/example/orders/PaymentSettled.class differ
+diff --git a/target/classes/dev/example/orders/PaymentSettledListener.class b/target/classes/dev/example/orders/PaymentSettledListener.class
+new file mode 100644
+index 0000000..749a2d9
+Binary files /dev/null and b/target/classes/dev/example/orders/PaymentSettledListener.class differ
+diff --git a/target/classes/dev/example/orders/PlaceOrderInput$LineInput.class b/target/classes/dev/example/orders/PlaceOrderInput$LineInput.class
+new file mode 100644
+index 0000000..6b2e719
+Binary files /dev/null and b/target/classes/dev/example/orders/PlaceOrderInput$LineInput.class differ
+diff --git a/target/classes/dev/example/orders/PlaceOrderInput.class b/target/classes/dev/example/orders/PlaceOrderInput.class
+new file mode 100644
+index 0000000..6fa0463
+Binary files /dev/null and b/target/classes/dev/example/orders/PlaceOrderInput.class differ
+diff --git a/target/classes/graphql/schema.graphqls b/target/classes/graphql/schema.graphqls
+new file mode 100644
+index 0000000..bbc2a4c
+--- /dev/null
++++ b/target/classes/graphql/schema.graphqls
+@@ -0,0 +1,41 @@
++extend schema @link(url: "https://specs.apollo.dev/federation/v2.9", import: ["@key"])
++
++type Query {
++    order(id: ID!): Order
++    ordersByCustomer(customerId: ID!): [Order!]!
++}
++
++type Mutation {
++    placeOrder(input: PlaceOrderInput!): Order!
++}
++
++type Order @key(fields: "id") {
++    id: ID!
++    customerId: ID!
++    currency: String!
++    total: Int!
++    status: OrderStatus!
++    lines: [OrderLine!]!
++}
++
++type OrderLine {
++    sku: String!
++    quantity: Int!
++    unitPrice: Int!
++}
++
++enum OrderStatus {
++    PLACED
++    PAID
++}
++
++input PlaceOrderInput {
++    customerId: ID!
++    currency: String!
++    lines: [LineInput!]!
++}
++
++input LineInput {
++    sku: String!
++    quantity: Int!
++}
+diff --git a/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst b/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+new file mode 100644
+index 0000000..8190018
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+@@ -0,0 +1,21 @@
++dev/example/orders/OrderNotFoundException.class
++dev/example/orders/Order.class
++dev/example/orders/KafkaErrorHandlingConfig.class
++dev/example/orders/PlaceOrderInput.class
++dev/example/orders/FederationConfig.class
++dev/example/orders/OrdersApplication.class
++dev/example/orders/OrderService.class
++dev/example/orders/GraphQlLimits.class
++dev/example/orders/OrderController.class
++dev/example/orders/PaymentSettled.class
++dev/example/orders/PaymentSettledListener.class
++dev/example/orders/OrderStatus.class
++dev/example/orders/OrderPlaced.class
++dev/example/orders/OutboxRepository.class
++dev/example/orders/PlaceOrderInput$LineInput.class
++dev/example/orders/OrderLineRepository.class
++dev/example/orders/OrderRepository.class
++dev/example/orders/OutboxEvent.class
++dev/example/orders/OrderLine.class
++dev/example/orders/Catalog.class
++dev/example/orders/OutboxRelay.class
+diff --git a/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst b/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+new file mode 100644
+index 0000000..3c9a79b
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+@@ -0,0 +1,20 @@
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/Catalog.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/FederationConfig.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/GraphQlLimits.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/KafkaErrorHandlingConfig.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/Order.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderController.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderLine.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderLineRepository.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderNotFoundException.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderPlaced.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderRepository.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderService.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrderStatus.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OrdersApplication.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OutboxEvent.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OutboxRelay.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/OutboxRepository.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/PaymentSettled.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/PaymentSettledListener.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/main/java/dev/example/orders/PlaceOrderInput.java
+diff --git a/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+new file mode 100644
+index 0000000..49f5f96
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+@@ -0,0 +1,3 @@
++dev/example/orders/OrderServiceMarkPaidTest.class
++dev/example/orders/PaymentSettledListenerTest$ListenerOnlyApp.class
++dev/example/orders/PaymentSettledListenerTest.class
+diff --git a/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+new file mode 100644
+index 0000000..5b77543
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+@@ -0,0 +1,2 @@
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/test/java/dev/example/orders/OrderServiceMarkPaidTest.java
++/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/src/test/java/dev/example/orders/PaymentSettledListenerTest.java
+diff --git a/target/surefire-reports/TEST-dev.example.orders.OrderServiceMarkPaidTest.xml b/target/surefire-reports/TEST-dev.example.orders.OrderServiceMarkPaidTest.xml
+new file mode 100644
+index 0000000..41f3aa4
+--- /dev/null
++++ b/target/surefire-reports/TEST-dev.example.orders.OrderServiceMarkPaidTest.xml
+@@ -0,0 +1,74 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="dev.example.orders.OrderServiceMarkPaidTest" time="0.244" tests="2" errors="0" skipped="0" failures="0" flakes="0">
++  <properties>
++    <property name="java.specification.version" value="25"/>
++    <property name="sun.jnu.encoding" value="UTF-8"/>
++    <property name="java.class.path" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/test-classes:/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-kafka/4.1.1/spring-boot-starter-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-kafka/4.1.1/spring-boot-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka/4.1.1/spring-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/com/apollographql/federation/federation-graphql-java-support/6.2.1/federation-graphql-java-support-6.2.1.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/com/google/protobuf/protobuf-java/4.35.1/protobuf-java-4.35.1.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka-test/4.1.1/spring-kafka-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1-test.jar:/Users/developer/.m2/repository/com/github/luben/zstd-jni/1.5.6-10/zstd-jni-1.5.6-10.jar:/Users/developer/.m2/repository/at/yawk/lz4/lz4-java/1.10.1/lz4-java-1.10.1.jar:/Users/developer/.m2/repository/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server/4.2.1/kafka-server-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage/4.2.1/kafka-storage-4.2.1.jar:/Users/developer/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator/4.2.1/kafka-group-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator-api/4.2.1/kafka-group-coordinator-api-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-coordinator-common/4.2.1/kafka-coordinator-common-4.2.1.jar:/Users/developer/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/Users/developer/.m2/repository/com/google/re2j/re2j/1.8/re2j-1.8.jar:/Users/developer/.m2/repository/com/dynatrace/hash4j/hash4j/0.22.0/hash4j-0.22.0.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-transaction-coordinator/4.2.1/kafka-transaction-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-raft/4.2.1/kafka-raft-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-share-coordinator/4.2.1/kafka-share-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage-api/4.2.1/kafka-storage-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.5/jackson-databind-2.21.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.5/jackson-core-2.21.5.jar:/Users/developer/.m2/repository/com/yammer/metrics/metrics-core/2.2.0/metrics-core-2.2.0.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-core/2.25.5/log4j-core-2.25.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-runtime/4.2.1/kafka-test-common-runtime-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka_2.13/4.2.1/kafka_2.13-4.2.1.jar:/Users/developer/.m2/repository/org/scala-lang/scala-library/2.13.17/scala-library-2.13.17.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-tools-api/4.2.1/kafka-tools-api-4.2.1.jar:/Users/developer/.m2/repository/net/sourceforge/argparse4j/argparse4j/0.7.0/argparse4j-0.7.0.jar:/Users/developer/.m2/repository/commons-validator/commons-validator/1.10.1/commons-validator-1.10.1.jar:/Users/developer/.m2/repository/commons-beanutils/commons-beanutils/1.11.0/commons-beanutils-1.11.0.jar:/Users/developer/.m2/repository/commons-digester/commons-digester/2.1/commons-digester-2.1.jar:/Users/developer/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-csv/2.21.5/jackson-dataformat-csv-2.21.5.jar:/Users/developer/.m2/repository/org/bitbucket/b_c/jose4j/0.9.6/jose4j-0.9.6.jar:/Users/developer/.m2/repository/org/scala-lang/scala-reflect/2.13.17/scala-reflect-2.13.17.jar:/Users/developer/.m2/repository/com/typesafe/scala-logging/scala-logging_2.13/3.9.6/scala-logging_2.13-3.9.6.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-internal-api/4.2.1/kafka-test-common-internal-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.21.5/jackson-dataformat-yaml-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-metadata/4.2.1/kafka-metadata-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.21.5/jackson-datatype-jdk8-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1.jar:/Users/developer/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/Users/developer/.m2/repository/org/pcollections/pcollections/4.0.2/pcollections-4.0.2.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1-test.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams-test-utils/4.2.1/kafka-streams-test-utils-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams/4.2.1/kafka-streams-4.2.1.jar:/Users/developer/.m2/repository/org/rocksdb/rocksdbjni/10.1.3/rocksdbjni-10.1.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-launcher/6.0.3/junit-platform-launcher-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:"/>
++    <property name="java.vm.vendor" value="Amazon.com Inc."/>
++    <property name="sun.arch.data.model" value="64"/>
++    <property name="java.vendor.url" value="https://aws.amazon.com/corretto/"/>
++    <property name="user.timezone" value="Africa/Harare"/>
++    <property name="org.jboss.logging.provider" value="slf4j"/>
++    <property name="os.name" value="Mac OS X"/>
++    <property name="java.vm.specification.version" value="25"/>
++    <property name="APPLICATION_NAME" value="orders"/>
++    <property name="sun.java.launcher" value="SUN_STANDARD"/>
++    <property name="user.country" value="ZW"/>
++    <property name="sun.boot.library.path" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn/lib"/>
++    <property name="sun.java.command" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/surefire/surefirebooter-20260927145547506_3.jar /private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/surefire 2026-09-27T14-55-47_455-jvmRun1 surefire-20260927145547506_1tmp surefire_0-20260927145547506_2tmp"/>
++    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="jdk.debug" value="release"/>
++    <property name="surefire.test.class.path" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/test-classes:/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-kafka/4.1.1/spring-boot-starter-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-kafka/4.1.1/spring-boot-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka/4.1.1/spring-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/com/apollographql/federation/federation-graphql-java-support/6.2.1/federation-graphql-java-support-6.2.1.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/com/google/protobuf/protobuf-java/4.35.1/protobuf-java-4.35.1.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka-test/4.1.1/spring-kafka-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1-test.jar:/Users/developer/.m2/repository/com/github/luben/zstd-jni/1.5.6-10/zstd-jni-1.5.6-10.jar:/Users/developer/.m2/repository/at/yawk/lz4/lz4-java/1.10.1/lz4-java-1.10.1.jar:/Users/developer/.m2/repository/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server/4.2.1/kafka-server-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage/4.2.1/kafka-storage-4.2.1.jar:/Users/developer/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator/4.2.1/kafka-group-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator-api/4.2.1/kafka-group-coordinator-api-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-coordinator-common/4.2.1/kafka-coordinator-common-4.2.1.jar:/Users/developer/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/Users/developer/.m2/repository/com/google/re2j/re2j/1.8/re2j-1.8.jar:/Users/developer/.m2/repository/com/dynatrace/hash4j/hash4j/0.22.0/hash4j-0.22.0.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-transaction-coordinator/4.2.1/kafka-transaction-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-raft/4.2.1/kafka-raft-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-share-coordinator/4.2.1/kafka-share-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage-api/4.2.1/kafka-storage-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.5/jackson-databind-2.21.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.5/jackson-core-2.21.5.jar:/Users/developer/.m2/repository/com/yammer/metrics/metrics-core/2.2.0/metrics-core-2.2.0.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-core/2.25.5/log4j-core-2.25.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-runtime/4.2.1/kafka-test-common-runtime-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka_2.13/4.2.1/kafka_2.13-4.2.1.jar:/Users/developer/.m2/repository/org/scala-lang/scala-library/2.13.17/scala-library-2.13.17.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-tools-api/4.2.1/kafka-tools-api-4.2.1.jar:/Users/developer/.m2/repository/net/sourceforge/argparse4j/argparse4j/0.7.0/argparse4j-0.7.0.jar:/Users/developer/.m2/repository/commons-validator/commons-validator/1.10.1/commons-validator-1.10.1.jar:/Users/developer/.m2/repository/commons-beanutils/commons-beanutils/1.11.0/commons-beanutils-1.11.0.jar:/Users/developer/.m2/repository/commons-digester/commons-digester/2.1/commons-digester-2.1.jar:/Users/developer/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-csv/2.21.5/jackson-dataformat-csv-2.21.5.jar:/Users/developer/.m2/repository/org/bitbucket/b_c/jose4j/0.9.6/jose4j-0.9.6.jar:/Users/developer/.m2/repository/org/scala-lang/scala-reflect/2.13.17/scala-reflect-2.13.17.jar:/Users/developer/.m2/repository/com/typesafe/scala-logging/scala-logging_2.13/3.9.6/scala-logging_2.13-3.9.6.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-internal-api/4.2.1/kafka-test-common-internal-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.21.5/jackson-dataformat-yaml-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-metadata/4.2.1/kafka-metadata-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.21.5/jackson-datatype-jdk8-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1.jar:/Users/developer/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/Users/developer/.m2/repository/org/pcollections/pcollections/4.0.2/pcollections-4.0.2.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1-test.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams-test-utils/4.2.1/kafka-streams-test-utils-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams/4.2.1/kafka-streams-4.2.1.jar:/Users/developer/.m2/repository/org/rocksdb/rocksdbjni/10.1.3/rocksdbjni-10.1.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-launcher/6.0.3/junit-platform-launcher-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:"/>
++    <property name="sun.cpu.endian" value="little"/>
++    <property name="user.home" value="/Users/developer"/>
++    <property name="user.language" value="en"/>
++    <property name="java.specification.vendor" value="Oracle Corporation"/>
++    <property name="spring.embedded.kafka.brokers" value="localhost:59436"/>
++    <property name="java.version.date" value="2026-07-21"/>
++    <property name="java.home" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn"/>
++    <property name="file.separator" value="/"/>
++    <property name="basedir" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011"/>
++    <property name="java.vm.compressedOopsMode" value="Zero based"/>
++    <property name="line.separator" value="&#10;"/>
++    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
++    <property name="java.specification.name" value="Java Platform API Specification"/>
++    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
++    <property name="java.awt.headless" value="true"/>
++    <property name="apple.awt.application.name" value="ForkedBooter"/>
++    <property name="surefire.real.class.path" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/surefire/surefirebooter-20260927145547506_3.jar"/>
++    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
++    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.runtime.version" value="25.0.4+7-LTS"/>
++    <property name="user.name" value="developer"/>
++    <property name="stdout.encoding" value="UTF-8"/>
++    <property name="path.separator" value=":"/>
++    <property name="os.version" value="26.4.1"/>
++    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
++    <property name="file.encoding" value="UTF-8"/>
++    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
++    <property name="java.vendor.version" value="Corretto-25.0.4.7.1"/>
++    <property name="localRepository" value="/Users/developer/.m2/repository"/>
++    <property name="java.vendor.url.bug" value="https://github.com/corretto/corretto-25/issues/"/>
++    <property name="java.io.tmpdir" value="/var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/"/>
++    <property name="java.version" value="25.0.4"/>
++    <property name="spring.kafka.bootstrap-servers" value="localhost:59436"/>
++    <property name="user.dir" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011"/>
++    <property name="os.arch" value="aarch64"/>
++    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
++    <property name="PID" value="96615"/>
++    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
++    <property name="native.encoding" value="UTF-8"/>
++    <property name="java.library.path" value="/Users/developer/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
++    <property name="java.vm.info" value="mixed mode, sharing"/>
++    <property name="stderr.encoding" value="UTF-8"/>
++    <property name="java.vendor" value="Amazon.com Inc."/>
++    <property name="java.vm.version" value="25.0.4+7-LTS"/>
++    <property name="stdin.encoding" value="UTF-8"/>
++    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
++    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.class.version" value="69.0"/>
++    <property name="LOGGED_APPLICATION_NAME" value="[orders] "/>
++  </properties>
++  <testcase name="rejectsAPaymentForAnOrderThatDoesNotExist" classname="dev.example.orders.OrderServiceMarkPaidTest" time="0.006"/>
++  <testcase name="marksAKnownOrderAsPaid" classname="dev.example.orders.OrderServiceMarkPaidTest" time="0.001"/>
++</testsuite>
+\ No newline at end of file
+diff --git a/target/surefire-reports/TEST-dev.example.orders.PaymentSettledListenerTest.xml b/target/surefire-reports/TEST-dev.example.orders.PaymentSettledListenerTest.xml
+new file mode 100644
+index 0000000..f910be1
+--- /dev/null
++++ b/target/surefire-reports/TEST-dev.example.orders.PaymentSettledListenerTest.xml
+@@ -0,0 +1,121 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="dev.example.orders.PaymentSettledListenerTest" time="10.265" tests="5" errors="0" skipped="0" failures="0" flakes="0">
++  <properties>
++    <property name="java.specification.version" value="25"/>
++    <property name="sun.jnu.encoding" value="UTF-8"/>
++    <property name="java.class.path" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/test-classes:/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-kafka/4.1.1/spring-boot-starter-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-kafka/4.1.1/spring-boot-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka/4.1.1/spring-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/com/apollographql/federation/federation-graphql-java-support/6.2.1/federation-graphql-java-support-6.2.1.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/com/google/protobuf/protobuf-java/4.35.1/protobuf-java-4.35.1.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka-test/4.1.1/spring-kafka-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1-test.jar:/Users/developer/.m2/repository/com/github/luben/zstd-jni/1.5.6-10/zstd-jni-1.5.6-10.jar:/Users/developer/.m2/repository/at/yawk/lz4/lz4-java/1.10.1/lz4-java-1.10.1.jar:/Users/developer/.m2/repository/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server/4.2.1/kafka-server-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage/4.2.1/kafka-storage-4.2.1.jar:/Users/developer/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator/4.2.1/kafka-group-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator-api/4.2.1/kafka-group-coordinator-api-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-coordinator-common/4.2.1/kafka-coordinator-common-4.2.1.jar:/Users/developer/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/Users/developer/.m2/repository/com/google/re2j/re2j/1.8/re2j-1.8.jar:/Users/developer/.m2/repository/com/dynatrace/hash4j/hash4j/0.22.0/hash4j-0.22.0.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-transaction-coordinator/4.2.1/kafka-transaction-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-raft/4.2.1/kafka-raft-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-share-coordinator/4.2.1/kafka-share-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage-api/4.2.1/kafka-storage-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.5/jackson-databind-2.21.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.5/jackson-core-2.21.5.jar:/Users/developer/.m2/repository/com/yammer/metrics/metrics-core/2.2.0/metrics-core-2.2.0.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-core/2.25.5/log4j-core-2.25.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-runtime/4.2.1/kafka-test-common-runtime-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka_2.13/4.2.1/kafka_2.13-4.2.1.jar:/Users/developer/.m2/repository/org/scala-lang/scala-library/2.13.17/scala-library-2.13.17.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-tools-api/4.2.1/kafka-tools-api-4.2.1.jar:/Users/developer/.m2/repository/net/sourceforge/argparse4j/argparse4j/0.7.0/argparse4j-0.7.0.jar:/Users/developer/.m2/repository/commons-validator/commons-validator/1.10.1/commons-validator-1.10.1.jar:/Users/developer/.m2/repository/commons-beanutils/commons-beanutils/1.11.0/commons-beanutils-1.11.0.jar:/Users/developer/.m2/repository/commons-digester/commons-digester/2.1/commons-digester-2.1.jar:/Users/developer/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-csv/2.21.5/jackson-dataformat-csv-2.21.5.jar:/Users/developer/.m2/repository/org/bitbucket/b_c/jose4j/0.9.6/jose4j-0.9.6.jar:/Users/developer/.m2/repository/org/scala-lang/scala-reflect/2.13.17/scala-reflect-2.13.17.jar:/Users/developer/.m2/repository/com/typesafe/scala-logging/scala-logging_2.13/3.9.6/scala-logging_2.13-3.9.6.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-internal-api/4.2.1/kafka-test-common-internal-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.21.5/jackson-dataformat-yaml-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-metadata/4.2.1/kafka-metadata-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.21.5/jackson-datatype-jdk8-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1.jar:/Users/developer/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/Users/developer/.m2/repository/org/pcollections/pcollections/4.0.2/pcollections-4.0.2.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1-test.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams-test-utils/4.2.1/kafka-streams-test-utils-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams/4.2.1/kafka-streams-4.2.1.jar:/Users/developer/.m2/repository/org/rocksdb/rocksdbjni/10.1.3/rocksdbjni-10.1.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-launcher/6.0.3/junit-platform-launcher-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:"/>
++    <property name="java.vm.vendor" value="Amazon.com Inc."/>
++    <property name="sun.arch.data.model" value="64"/>
++    <property name="java.vendor.url" value="https://aws.amazon.com/corretto/"/>
++    <property name="user.timezone" value="Africa/Harare"/>
++    <property name="org.jboss.logging.provider" value="slf4j"/>
++    <property name="os.name" value="Mac OS X"/>
++    <property name="java.vm.specification.version" value="25"/>
++    <property name="APPLICATION_NAME" value="orders"/>
++    <property name="sun.java.launcher" value="SUN_STANDARD"/>
++    <property name="user.country" value="ZW"/>
++    <property name="sun.boot.library.path" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn/lib"/>
++    <property name="sun.java.command" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/surefire/surefirebooter-20260927145547506_3.jar /private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/surefire 2026-09-27T14-55-47_455-jvmRun1 surefire-20260927145547506_1tmp surefire_0-20260927145547506_2tmp"/>
++    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="jdk.debug" value="release"/>
++    <property name="surefire.test.class.path" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/test-classes:/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-kafka/4.1.1/spring-boot-starter-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-kafka/4.1.1/spring-boot-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka/4.1.1/spring-kafka-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/com/apollographql/federation/federation-graphql-java-support/6.2.1/federation-graphql-java-support-6.2.1.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/com/google/protobuf/protobuf-java/4.35.1/protobuf-java-4.35.1.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/kafka/spring-kafka-test/4.1.1/spring-kafka-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1-test.jar:/Users/developer/.m2/repository/com/github/luben/zstd-jni/1.5.6-10/zstd-jni-1.5.6-10.jar:/Users/developer/.m2/repository/at/yawk/lz4/lz4-java/1.10.1/lz4-java-1.10.1.jar:/Users/developer/.m2/repository/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server/4.2.1/kafka-server-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-clients/4.2.1/kafka-clients-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage/4.2.1/kafka-storage-4.2.1.jar:/Users/developer/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator/4.2.1/kafka-group-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-group-coordinator-api/4.2.1/kafka-group-coordinator-api-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-coordinator-common/4.2.1/kafka-coordinator-common-4.2.1.jar:/Users/developer/.m2/repository/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.jar:/Users/developer/.m2/repository/com/google/re2j/re2j/1.8/re2j-1.8.jar:/Users/developer/.m2/repository/com/dynatrace/hash4j/hash4j/0.22.0/hash4j-0.22.0.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-transaction-coordinator/4.2.1/kafka-transaction-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-raft/4.2.1/kafka-raft-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-share-coordinator/4.2.1/kafka-share-coordinator-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-storage-api/4.2.1/kafka-storage-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.21.5/jackson-databind-2.21.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.21.5/jackson-core-2.21.5.jar:/Users/developer/.m2/repository/com/yammer/metrics/metrics-core/2.2.0/metrics-core-2.2.0.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-core/2.25.5/log4j-core-2.25.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-runtime/4.2.1/kafka-test-common-runtime-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka_2.13/4.2.1/kafka_2.13-4.2.1.jar:/Users/developer/.m2/repository/org/scala-lang/scala-library/2.13.17/scala-library-2.13.17.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-tools-api/4.2.1/kafka-tools-api-4.2.1.jar:/Users/developer/.m2/repository/net/sourceforge/argparse4j/argparse4j/0.7.0/argparse4j-0.7.0.jar:/Users/developer/.m2/repository/commons-validator/commons-validator/1.10.1/commons-validator-1.10.1.jar:/Users/developer/.m2/repository/commons-beanutils/commons-beanutils/1.11.0/commons-beanutils-1.11.0.jar:/Users/developer/.m2/repository/commons-digester/commons-digester/2.1/commons-digester-2.1.jar:/Users/developer/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-csv/2.21.5/jackson-dataformat-csv-2.21.5.jar:/Users/developer/.m2/repository/org/bitbucket/b_c/jose4j/0.9.6/jose4j-0.9.6.jar:/Users/developer/.m2/repository/org/scala-lang/scala-reflect/2.13.17/scala-reflect-2.13.17.jar:/Users/developer/.m2/repository/com/typesafe/scala-logging/scala-logging_2.13/3.9.6/scala-logging_2.13-3.9.6.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-test-common-internal-api/4.2.1/kafka-test-common-internal-api-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.21.5/jackson-dataformat-yaml-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-metadata/4.2.1/kafka-metadata-4.2.1.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.21.5/jackson-datatype-jdk8-2.21.5.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1.jar:/Users/developer/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/Users/developer/.m2/repository/org/pcollections/pcollections/4.0.2/pcollections-4.0.2.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-server-common/4.2.1/kafka-server-common-4.2.1-test.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams-test-utils/4.2.1/kafka-streams-test-utils-4.2.1.jar:/Users/developer/.m2/repository/org/apache/kafka/kafka-streams/4.2.1/kafka-streams-4.2.1.jar:/Users/developer/.m2/repository/org/rocksdb/rocksdbjni/10.1.3/rocksdbjni-10.1.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-launcher/6.0.3/junit-platform-launcher-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:"/>
++    <property name="sun.cpu.endian" value="little"/>
++    <property name="user.home" value="/Users/developer"/>
++    <property name="user.language" value="en"/>
++    <property name="java.specification.vendor" value="Oracle Corporation"/>
++    <property name="spring.embedded.kafka.brokers" value="localhost:59436"/>
++    <property name="java.version.date" value="2026-07-21"/>
++    <property name="java.home" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn"/>
++    <property name="file.separator" value="/"/>
++    <property name="basedir" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011"/>
++    <property name="java.vm.compressedOopsMode" value="Zero based"/>
++    <property name="line.separator" value="&#10;"/>
++    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
++    <property name="java.specification.name" value="Java Platform API Specification"/>
++    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
++    <property name="java.awt.headless" value="true"/>
++    <property name="apple.awt.application.name" value="ForkedBooter"/>
++    <property name="surefire.real.class.path" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011/target/surefire/surefirebooter-20260927145547506_3.jar"/>
++    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
++    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.runtime.version" value="25.0.4+7-LTS"/>
++    <property name="user.name" value="developer"/>
++    <property name="stdout.encoding" value="UTF-8"/>
++    <property name="path.separator" value=":"/>
++    <property name="os.version" value="26.4.1"/>
++    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
++    <property name="file.encoding" value="UTF-8"/>
++    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
++    <property name="java.vendor.version" value="Corretto-25.0.4.7.1"/>
++    <property name="localRepository" value="/Users/developer/.m2/repository"/>
++    <property name="java.vendor.url.bug" value="https://github.com/corretto/corretto-25/issues/"/>
++    <property name="java.io.tmpdir" value="/var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/"/>
++    <property name="java.version" value="25.0.4"/>
++    <property name="spring.kafka.bootstrap-servers" value="localhost:59436"/>
++    <property name="user.dir" value="/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011"/>
++    <property name="os.arch" value="aarch64"/>
++    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
++    <property name="PID" value="96615"/>
++    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
++    <property name="native.encoding" value="UTF-8"/>
++    <property name="java.library.path" value="/Users/developer/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
++    <property name="java.vm.info" value="mixed mode, sharing"/>
++    <property name="stderr.encoding" value="UTF-8"/>
++    <property name="java.vendor" value="Amazon.com Inc."/>
++    <property name="java.vm.version" value="25.0.4+7-LTS"/>
++    <property name="stdin.encoding" value="UTF-8"/>
++    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
++    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.class.version" value="69.0"/>
++    <property name="LOGGED_APPLICATION_NAME" value="[orders] "/>
++  </properties>
++  <testcase name="unparseableMessageIsDeadLetteredWithoutRetrying" classname="dev.example.orders.PaymentSettledListenerTest" time="1.919">
++    <system-out><![CDATA[
++  .   ____          _            __ _ _
++ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
++( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
++ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
++  '  |____| .__|_| |_|_| |_\__, | / / / /
++ =========|_|==============|___/=/_/_/_/
++
++ :: Spring Boot ::                (v4.1.1)
++
++Bootstrap metadata: BootstrapMetadata(records=[ApiMessageAndVersion(FeatureLevelRecord(name='metadata.version', featureLevel=30) at version 0), ApiMessageAndVersion(FeatureLevelRecord(name='eligible.leader.replicas.version', featureLevel=1) at version 0), ApiMessageAndVersion(FeatureLevelRecord(name='group.version', featureLevel=1) at version 0), ApiMessageAndVersion(FeatureLevelRecord(name='share.version', featureLevel=1) at version 0), ApiMessageAndVersion(FeatureLevelRecord(name='streams.version', featureLevel=1) at version 0), ApiMessageAndVersion(FeatureLevelRecord(name='transaction.version', featureLevel=2) at version 0)], metadataVersionLevel=30, source=format command)
++Formatting metadata directory /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/kafka-2099296190190819553/combined_0_0 with metadata.version 4.3-IV0.
++2026-09-27T14:55:49.265+02:00  WARN 96615 --- [orders] [0-event-handler] o.a.kafka.controller.QuorumController    : [QuorumController id=0] Performing controller activation. The metadata log appears to be empty. Appending 6 bootstrap record(s) in metadata transaction at metadata.version 4.3-IV0 from bootstrap source 'testkit'.
++2026-09-27T14:55:49.561+02:00  INFO 96615 --- [orders] [           main] d.e.orders.PaymentSettledListenerTest    : Starting PaymentSettledListenerTest using Java 25.0.4 with PID 96615 (started by developer in /private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011)
++2026-09-27T14:55:49.561+02:00  INFO 96615 --- [orders] [           main] d.e.orders.PaymentSettledListenerTest    : No active profile set, falling back to 1 default profile: "default"
++2026-09-27T14:55:50.633+02:00  INFO 96615 --- [orders] [           main] d.e.orders.PaymentSettledListenerTest    : Started PaymentSettledListenerTest in 2.25 seconds (process running for 3.077)
++2026-09-27T14:55:51.235+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : orders: partitions assigned: [payment-settled-0]
++]]></system-out>
++    <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
++WARNING: A Java agent has been loaded dynamically (/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
++WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
++WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
++WARNING: Dynamic loading of agents will be disallowed by default in a future release
++]]></system-err>
++  </testcase>
++  <testcase name="consumerCarriesOnAfterADeadLetteredRecord" classname="dev.example.orders.PaymentSettledListenerTest" time="1.076">
++    <system-out><![CDATA[2026-09-27T14:55:52.640+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 5050
++2026-09-27T14:55:53.145+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 8
++]]></system-out>
++  </testcase>
++  <testcase name="settledPaymentIsHandedToOrderService" classname="dev.example.orders.PaymentSettledListenerTest" time="1.06">
++    <system-out><![CDATA[2026-09-27T14:55:53.682+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 7
++]]></system-out>
++  </testcase>
++  <testcase name="transientFailureIsRetriedWithBackoffAndThenDeadLettered" classname="dev.example.orders.PaymentSettledListenerTest" time="2.625">
++    <system-out><![CDATA[2026-09-27T14:55:54.756+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 41
++2026-09-27T14:55:54.968+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : Record in retry and not yet recovered
++2026-09-27T14:55:55.266+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 41
++2026-09-27T14:55:55.467+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : Record in retry and not yet recovered
++2026-09-27T14:55:55.775+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 41
++2026-09-27T14:55:55.976+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : Record in retry and not yet recovered
++2026-09-27T14:55:56.285+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 41
++]]></system-out>
++  </testcase>
++  <testcase name="unknownOrderIsDeadLetteredWithoutRetrying" classname="dev.example.orders.PaymentSettledListenerTest" time="1.127">
++    <system-out><![CDATA[2026-09-27T14:55:57.368+02:00  INFO 96615 --- [orders] [ntainer#0-0-C-1] d.example.orders.PaymentSettledListener  : payment-settled attempt for order 4040
++]]></system-out>
++  </testcase>
++</testsuite>
+\ No newline at end of file
+diff --git a/target/surefire-reports/dev.example.orders.OrderServiceMarkPaidTest.txt b/target/surefire-reports/dev.example.orders.OrderServiceMarkPaidTest.txt
+new file mode 100644
+index 0000000..4f5ab38
+--- /dev/null
++++ b/target/surefire-reports/dev.example.orders.OrderServiceMarkPaidTest.txt
+@@ -0,0 +1,4 @@
++-------------------------------------------------------------------------------
++Test set: dev.example.orders.OrderServiceMarkPaidTest
++-------------------------------------------------------------------------------
++Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.244 s -- in dev.example.orders.OrderServiceMarkPaidTest
+diff --git a/target/surefire-reports/dev.example.orders.PaymentSettledListenerTest.txt b/target/surefire-reports/dev.example.orders.PaymentSettledListenerTest.txt
+new file mode 100644
+index 0000000..fff6fac
+--- /dev/null
++++ b/target/surefire-reports/dev.example.orders.PaymentSettledListenerTest.txt
+@@ -0,0 +1,4 @@
++-------------------------------------------------------------------------------
++Test set: dev.example.orders.PaymentSettledListenerTest
++-------------------------------------------------------------------------------
++Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.27 s -- in dev.example.orders.PaymentSettledListenerTest
+diff --git a/target/test-classes/dev/example/orders/OrderServiceMarkPaidTest.class b/target/test-classes/dev/example/orders/OrderServiceMarkPaidTest.class
+new file mode 100644
+index 0000000..a847759
+Binary files /dev/null and b/target/test-classes/dev/example/orders/OrderServiceMarkPaidTest.class differ
+diff --git a/target/test-classes/dev/example/orders/PaymentSettledListenerTest$ListenerOnlyApp.class b/target/test-classes/dev/example/orders/PaymentSettledListenerTest$ListenerOnlyApp.class
+new file mode 100644
+index 0000000..8c0dc42
+Binary files /dev/null and b/target/test-classes/dev/example/orders/PaymentSettledListenerTest$ListenerOnlyApp.class differ
+diff --git a/target/test-classes/dev/example/orders/PaymentSettledListenerTest.class b/target/test-classes/dev/example/orders/PaymentSettledListenerTest.class
+new file mode 100644
+index 0000000..ed56a95
+Binary files /dev/null and b/target/test-classes/dev/example/orders/PaymentSettledListenerTest.class differ
+diff --git a/target/test-classes/logback-test.xml b/target/test-classes/logback-test.xml
+new file mode 100644
+index 0000000..5f35503
+--- /dev/null
++++ b/target/test-classes/logback-test.xml
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<configuration>
++	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
++	<include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
++
++	<!-- The embedded broker is very chatty; keep the test output readable. -->
++	<logger name="kafka" level="WARN"/>
++	<logger name="org.apache.kafka" level="WARN"/>
++	<logger name="state.change.logger" level="WARN"/>
++
++	<root level="INFO">
++		<appender-ref ref="CONSOLE"/>
++	</root>
++</configuration>

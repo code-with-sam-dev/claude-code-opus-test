@@ -1,0 +1,57 @@
+{
+ "task": "T1",
+ "model": "claude-opus-5",
+ "repeat": 3,
+ "order_in_repeat": 3,
+ "workdir": "/private/tmp/opus-runs/T1-claude-opus-5-r3-1790509420",
+ "timed_out": false,
+ "result_subtype": "success",
+ "wall_s": 196.6,
+ "claude_duration_s": 193.7,
+ "num_turns": 27,
+ "tool_calls": 26,
+ "tool_calls_by_name": {
+  "Bash": 10,
+  "Read": 5,
+  "Edit": 11
+ },
+ "permission_denials": 0,
+ "possible_leak": [],
+ "checks": {
+  "normalised": true,
+  "empty_array": true,
+  "rejects_two_letters": true,
+  "rejects_symbol": true,
+  "regression_and_vet": true,
+  "parameterised_sql": true,
+  "limit_50": true,
+  "route_registered": true
+ },
+ "checks_passed": 8,
+ "checks_total": 8,
+ "all_passed": true,
+ "cost": {
+  "by_model": {
+   "claude-opus-5": {
+    "uncached_input": 38,
+    "cache_write_5m": 0,
+    "cache_write_1h": 26651,
+    "cache_read": 372489,
+    "output": 10990,
+    "calculated_usd": 0.7276945
+   }
+  },
+  "calculated_usd": 0.7277,
+  "claude_code_total_cost_usd": 0.7276944999999999
+ },
+ "checks_original": {
+  "normalised": true,
+  "empty_array": true,
+  "rejects_two_letters": true,
+  "rejects_symbol": true,
+  "regression_and_vet": true,
+  "parameterised_sql": true,
+  "limit_50": true,
+  "route_registered": true
+ }
+}

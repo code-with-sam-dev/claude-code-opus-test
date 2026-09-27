@@ -1,0 +1,57 @@
+{
+ "task": "T3",
+ "model": "claude-opus-5-5",
+ "repeat": 3,
+ "order_in_repeat": 2,
+ "workdir": "/private/tmp/opus-runs/T3-claude-opus-5-5-r3-1790517396",
+ "timed_out": false,
+ "result_subtype": "success",
+ "wall_s": 339.3,
+ "claude_duration_s": 337.1,
+ "num_turns": 33,
+ "tool_calls": 32,
+ "tool_calls_by_name": {
+  "Bash": 17,
+  "Edit": 10,
+  "Write": 5
+ },
+ "permission_denials": 0,
+ "possible_leak": [],
+ "checks": {
+  "goodRecordIsPaidOnce": true,
+  "transientFailureRecovers": true,
+  "transientRetriesAreBoundedAndBackedOff": true,
+  "malformedRecordGoesStraightToTheDlt": true,
+  "unknownOrderIsNotRetried": true,
+  "goodRecordAfterAPoisonOneIsPaid": true,
+  "service_throws_not_found": true,
+  "own_tests_pass": true
+ },
+ "checks_passed": 8,
+ "checks_total": 8,
+ "all_passed": true,
+ "cost": {
+  "by_model": {
+   "claude-opus-5-5": {
+    "uncached_input": 40,
+    "cache_write_5m": 0,
+    "cache_write_1h": 45874,
+    "cache_read": 477313,
+    "output": 21316,
+    "calculated_usd": 0.8889346
+   }
+  },
+  "calculated_usd": 0.8889,
+  "claude_code_total_cost_usd": 0.8889346000000002
+ },
+ "checks_original": {
+  "goodRecordIsPaidOnce": true,
+  "transientFailureRecovers": true,
+  "transientRetriesAreBoundedAndBackedOff": true,
+  "malformedRecordGoesStraightToTheDlt": true,
+  "unknownOrderIsNotRetried": true,
+  "goodRecordAfterAPoisonOneIsPaid": true,
+  "service_throws_not_found": true,
+  "own_tests_pass": true
+ }
+}

@@ -1,0 +1,1555 @@
+[
+ {
+  "task": "T1",
+  "model": "claude-fable-5-1",
+  "repeat": 1,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T1-claude-fable-5-1-r1-1790508707",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 88.4,
+  "claude_duration_s": 85.5,
+  "num_turns": 19,
+  "tool_calls": 18,
+  "tool_calls_by_name": {
+   "Bash": 3,
+   "Read": 7,
+   "Edit": 8
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 162,
+     "cache_write_5m": 0,
+     "cache_write_1h": 20410,
+     "cache_read": 77975,
+     "output": 7787,
+     "calculated_usd": 0.81866375
+    }
+   },
+   "calculated_usd": 0.8187,
+   "claude_code_total_cost_usd": 0.8186637500000001
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-fable-5-1",
+  "repeat": 2,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T1-claude-fable-5-1-r2-1790509057",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 89.8,
+  "claude_duration_s": 87.4,
+  "num_turns": 19,
+  "tool_calls": 18,
+  "tool_calls_by_name": {
+   "Bash": 2,
+   "Read": 6,
+   "Edit": 10
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 130,
+     "cache_write_5m": 0,
+     "cache_write_1h": 19499,
+     "cache_read": 55849,
+     "output": 6395,
+     "calculated_usd": 0.72499225
+    }
+   },
+   "calculated_usd": 0.725,
+   "claude_code_total_cost_usd": 0.7249922499999999
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-fable-5-1",
+  "repeat": 3,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T1-claude-fable-5-1-r3-1790509233",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 97.5,
+  "claude_duration_s": 95.1,
+  "num_turns": 21,
+  "tool_calls": 20,
+  "tool_calls_by_name": {
+   "Bash": 2,
+   "Read": 6,
+   "Edit": 12
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 162,
+     "cache_write_5m": 0,
+     "cache_write_1h": 20054,
+     "cache_read": 79140,
+     "output": 7305,
+     "calculated_usd": 0.787735
+    }
+   },
+   "calculated_usd": 0.7877,
+   "claude_code_total_cost_usd": 0.7877349999999999
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-opus-5-5",
+  "repeat": 1,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T1-claude-opus-5-5-r1-1790508427",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 83.7,
+  "claude_duration_s": 81.2,
+  "num_turns": 23,
+  "tool_calls": 22,
+  "tool_calls_by_name": {
+   "Bash": 7,
+   "Read": 5,
+   "Edit": 10
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 20,
+     "cache_write_5m": 0,
+     "cache_write_1h": 19770,
+     "cache_read": 152628,
+     "output": 9234,
+     "calculated_usd": 0.3734456
+    }
+   },
+   "calculated_usd": 0.3734,
+   "claude_code_total_cost_usd": 0.3734456
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-opus-5-5",
+  "repeat": 2,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T1-claude-opus-5-5-r2-1790509151",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 78.6,
+  "claude_duration_s": 76.4,
+  "num_turns": 19,
+  "tool_calls": 18,
+  "tool_calls_by_name": {
+   "Bash": 4,
+   "Read": 5,
+   "Edit": 9
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 14,
+     "cache_write_5m": 0,
+     "cache_write_1h": 18556,
+     "cache_read": 87371,
+     "output": 8714,
+     "calculated_usd": 0.3402582
+    }
+   },
+   "calculated_usd": 0.3403,
+   "claude_code_total_cost_usd": 0.3402582
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": false,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-opus-5-5",
+  "repeat": 3,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T1-claude-opus-5-5-r3-1790509335",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 81.9,
+  "claude_duration_s": 79.7,
+  "num_turns": 21,
+  "tool_calls": 20,
+  "tool_calls_by_name": {
+   "Bash": 5,
+   "Read": 5,
+   "Edit": 10
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 18,
+     "cache_write_5m": 0,
+     "cache_write_1h": 19665,
+     "cache_read": 131488,
+     "output": 9058,
+     "calculated_usd": 0.3648496
+    }
+   },
+   "calculated_usd": 0.3648,
+   "claude_code_total_cost_usd": 0.36484959999999994
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-opus-5",
+  "repeat": 1,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T1-claude-opus-5-r1-1790508514",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 190.5,
+  "claude_duration_s": 188.5,
+  "num_turns": 25,
+  "tool_calls": 24,
+  "tool_calls_by_name": {
+   "Bash": 8,
+   "Read": 5,
+   "Edit": 11
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 34,
+     "cache_write_5m": 0,
+     "cache_write_1h": 26265,
+     "cache_read": 307029,
+     "output": 10118,
+     "calculated_usd": 0.6692845
+    }
+   },
+   "calculated_usd": 0.6693,
+   "claude_code_total_cost_usd": 0.6692845000000001
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-opus-5",
+  "repeat": 2,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T1-claude-opus-5-r2-1790508799",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 255.7,
+  "claude_duration_s": 253.8,
+  "num_turns": 27,
+  "tool_calls": 26,
+  "tool_calls_by_name": {
+   "Bash": 8,
+   "Read": 6,
+   "Edit": 12
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 44,
+     "cache_write_5m": 0,
+     "cache_write_1h": 21647,
+     "cache_read": 365564,
+     "output": 8275,
+     "calculated_usd": 0.606347
+    }
+   },
+   "calculated_usd": 0.6063,
+   "claude_code_total_cost_usd": 0.606347
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T1",
+  "model": "claude-opus-5",
+  "repeat": 3,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T1-claude-opus-5-r3-1790509420",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 196.6,
+  "claude_duration_s": 193.7,
+  "num_turns": 27,
+  "tool_calls": 26,
+  "tool_calls_by_name": {
+   "Bash": 10,
+   "Read": 5,
+   "Edit": 11
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 38,
+     "cache_write_5m": 0,
+     "cache_write_1h": 26651,
+     "cache_read": 372489,
+     "output": 10990,
+     "calculated_usd": 0.7276945
+    }
+   },
+   "calculated_usd": 0.7277,
+   "claude_code_total_cost_usd": 0.7276944999999999
+  },
+  "checks_original": {
+   "normalised": true,
+   "empty_array": true,
+   "rejects_two_letters": true,
+   "rejects_symbol": true,
+   "regression_and_vet": true,
+   "parameterised_sql": true,
+   "limit_50": true,
+   "route_registered": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-fable-5-1",
+  "repeat": 1,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T2-claude-fable-5-1-r1-1790510420",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 257.2,
+  "claude_duration_s": 254.3,
+  "num_turns": 34,
+  "tool_calls": 33,
+  "tool_calls_by_name": {
+   "Bash": 6,
+   "Read": 16,
+   "Edit": 8,
+   "Write": 3
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 290,
+     "cache_write_5m": 0,
+     "cache_write_1h": 52528,
+     "cache_read": 346193,
+     "output": 19978,
+     "calculated_usd": 2.13890825
+    }
+   },
+   "calculated_usd": 2.1389,
+   "claude_code_total_cost_usd": 2.13890825
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-fable-5-1",
+  "repeat": 2,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T2-claude-fable-5-1-r2-1790511377",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 172.3,
+  "claude_duration_s": 169.7,
+  "num_turns": 33,
+  "tool_calls": 32,
+  "tool_calls_by_name": {
+   "Bash": 4,
+   "Read": 18,
+   "Edit": 7,
+   "Write": 3
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 226,
+     "cache_write_5m": 0,
+     "cache_write_1h": 46673,
+     "cache_read": 231608,
+     "output": 14320,
+     "calculated_usd": 1.709622
+    }
+   },
+   "calculated_usd": 1.7096,
+   "claude_code_total_cost_usd": 1.709622
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-fable-5-1",
+  "repeat": 3,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T2-claude-fable-5-1-r3-1790511714",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 325.4,
+  "claude_duration_s": 322.3,
+  "num_turns": 49,
+  "tool_calls": 48,
+  "tool_calls_by_name": {
+   "Bash": 14,
+   "Read": 17,
+   "Write": 7,
+   "Edit": 10
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 546,
+     "cache_write_5m": 0,
+     "cache_write_1h": 66230,
+     "cache_read": 770569,
+     "output": 24583,
+     "calculated_usd": 2.75185225
+    }
+   },
+   "calculated_usd": 2.7519,
+   "claude_code_total_cost_usd": 2.7518522499999993
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-opus-5-5",
+  "repeat": 1,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T2-claude-opus-5-5-r1-1790509622",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 125.4,
+  "claude_duration_s": 123.0,
+  "num_turns": 23,
+  "tool_calls": 22,
+  "tool_calls_by_name": {
+   "Bash": 11,
+   "Edit": 9,
+   "Write": 2
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 22,
+     "cache_write_5m": 0,
+     "cache_write_1h": 27396,
+     "cache_read": 169289,
+     "output": 12567,
+     "calculated_usd": 0.5044538
+    }
+   },
+   "calculated_usd": 0.5045,
+   "claude_code_total_cost_usd": 0.5044538
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-opus-5-5",
+  "repeat": 2,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T2-claude-opus-5-5-r2-1790511564",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 133.5,
+  "claude_duration_s": 131.3,
+  "num_turns": 25,
+  "tool_calls": 24,
+  "tool_calls_by_name": {
+   "Bash": 9,
+   "Read": 1,
+   "Edit": 12,
+   "Write": 2
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 28,
+     "cache_write_5m": 0,
+     "cache_write_1h": 44037,
+     "cache_read": 377034,
+     "output": 12578,
+     "calculated_usd": 0.6793748000000001
+    }
+   },
+   "calculated_usd": 0.6794,
+   "claude_code_total_cost_usd": 0.6793747999999998
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-opus-5-5",
+  "repeat": 3,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 98.1,
+  "claude_duration_s": 96.0,
+  "num_turns": 23,
+  "tool_calls": 22,
+  "tool_calls_by_name": {
+   "Bash": 7,
+   "Read": 5,
+   "Edit": 7,
+   "Write": 3
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 22,
+     "cache_write_5m": 0,
+     "cache_write_1h": 26463,
+     "cache_read": 184424,
+     "output": 9506,
+     "calculated_usd": 0.4387968
+    }
+   },
+   "calculated_usd": 0.4388,
+   "claude_code_total_cost_usd": 0.43879680000000004
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-opus-5",
+  "repeat": 1,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T2-claude-opus-5-r1-1790509764",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 637.4,
+  "claude_duration_s": 634.3,
+  "num_turns": 52,
+  "tool_calls": 51,
+  "tool_calls_by_name": {
+   "Bash": 19,
+   "Read": 14,
+   "Edit": 12,
+   "Write": 6
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 80,
+     "cache_write_5m": 0,
+     "cache_write_1h": 65524,
+     "cache_read": 1582561,
+     "output": 33284,
+     "calculated_usd": 2.2790205
+    }
+   },
+   "calculated_usd": 2.279,
+   "claude_code_total_cost_usd": 2.2790204999999992
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-opus-5",
+  "repeat": 2,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T2-claude-opus-5-r2-1790510692",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 666.4,
+  "claude_duration_s": 663.6,
+  "num_turns": 49,
+  "tool_calls": 48,
+  "tool_calls_by_name": {
+   "Bash": 15,
+   "Read": 13,
+   "Edit": 17,
+   "Write": 3
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 72,
+     "cache_write_5m": 0,
+     "cache_write_1h": 51785,
+     "cache_read": 1164178,
+     "output": 26996,
+     "calculated_usd": 1.775199
+    }
+   },
+   "calculated_usd": 1.7752,
+   "claude_code_total_cost_usd": 1.775199
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T2",
+  "model": "claude-opus-5",
+  "repeat": 3,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T2-claude-opus-5-r3-1790512166",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 520.6,
+  "claude_duration_s": 518.6,
+  "num_turns": 62,
+  "tool_calls": 61,
+  "tool_calls_by_name": {
+   "Bash": 25,
+   "Read": 12,
+   "Edit": 21,
+   "Write": 3
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 98,
+     "cache_write_5m": 0,
+     "cache_write_1h": 62127,
+     "cache_read": 1894141,
+     "output": 31892,
+     "calculated_usd": 2.3661305
+    }
+   },
+   "calculated_usd": 2.3661,
+   "claude_code_total_cost_usd": 2.3661305
+  },
+  "checks_original": {
+   "orderCountIsCorrect": true,
+   "orderCountIsBatched": true,
+   "firstPageOfOneCustomer": true,
+   "nextPageContinuesFromTheCursor": true,
+   "defaultPageIsTen": true,
+   "unknownCustomerIsNotFound": true,
+   "nestedFieldsStayBatched": true,
+   "regression": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-fable-5-1",
+  "repeat": 1,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T3-claude-fable-5-1-r1-1790513863",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 519.9,
+  "claude_duration_s": 515.3,
+  "num_turns": 38,
+  "tool_calls": 37,
+  "tool_calls_by_name": {
+   "Bash": 14,
+   "Read": 10,
+   "Edit": 9,
+   "Write": 4
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 546,
+     "cache_write_5m": 0,
+     "cache_write_1h": 56161,
+     "cache_read": 556199,
+     "output": 26894,
+     "calculated_usd": 2.61242975
+    }
+   },
+   "calculated_usd": 2.6124,
+   "claude_code_total_cost_usd": 2.6124297499999996
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-fable-5-1",
+  "repeat": 2,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T3-claude-fable-5-1-r2-1790515474",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 669.0,
+  "claude_duration_s": 666.2,
+  "num_turns": 68,
+  "tool_calls": 67,
+  "tool_calls_by_name": {
+   "Bash": 43,
+   "Read": 13,
+   "Write": 6,
+   "Edit": 5
+  },
+  "permission_denials": 1,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 770,
+     "cache_write_5m": 0,
+     "cache_write_1h": 88606,
+     "cache_read": 1120715,
+     "output": 43042,
+     "calculated_usd": 4.21209875
+    }
+   },
+   "calculated_usd": 4.2121,
+   "claude_code_total_cost_usd": 4.212098749999999
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-fable-5-1",
+  "repeat": 3,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T3-claude-fable-5-1-r3-1790516527",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 771.5,
+  "claude_duration_s": 768.8,
+  "num_turns": 82,
+  "tool_calls": 81,
+  "tool_calls_by_name": {
+   "Bash": 57,
+   "Read": 18,
+   "Edit": 2,
+   "Write": 4
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-fable-5-1": {
+     "uncached_input": 834,
+     "cache_write_5m": 0,
+     "cache_write_1h": 91475,
+     "cache_read": 1106783,
+     "output": 46219,
+     "calculated_usd": 4.42548575
+    }
+   },
+   "calculated_usd": 4.4255,
+   "claude_code_total_cost_usd": 4.425485750000001
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-opus-5-5",
+  "repeat": 1,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T3-claude-opus-5-5-r1-1790512702",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 216.5,
+  "claude_duration_s": 211.7,
+  "num_turns": 19,
+  "tool_calls": 18,
+  "tool_calls_by_name": {
+   "Bash": 9,
+   "Edit": 4,
+   "Write": 5
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 26,
+     "cache_write_5m": 0,
+     "cache_write_1h": 34299,
+     "cache_read": 276575,
+     "output": 18087,
+     "calculated_usd": 0.691551
+    }
+   },
+   "calculated_usd": 0.6916,
+   "claude_code_total_cost_usd": 0.691551
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-opus-5-5",
+  "repeat": 2,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T3-claude-opus-5-5-r2-1790516248",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 184.0,
+  "claude_duration_s": 180.9,
+  "num_turns": 20,
+  "tool_calls": 19,
+  "tool_calls_by_name": {
+   "Bash": 11,
+   "Edit": 4,
+   "Write": 4
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 30,
+     "cache_write_5m": 0,
+     "cache_write_1h": 31106,
+     "cache_read": 299935,
+     "output": 16067,
+     "calculated_usd": 0.630295
+    }
+   },
+   "calculated_usd": 0.6303,
+   "claude_code_total_cost_usd": 0.6302949999999998
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-opus-5-5",
+  "repeat": 3,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T3-claude-opus-5-5-r3-1790517396",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 339.3,
+  "claude_duration_s": 337.1,
+  "num_turns": 33,
+  "tool_calls": 32,
+  "tool_calls_by_name": {
+   "Bash": 17,
+   "Edit": 10,
+   "Write": 5
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5-5": {
+     "uncached_input": 40,
+     "cache_write_5m": 0,
+     "cache_write_1h": 45874,
+     "cache_read": 477313,
+     "output": 21316,
+     "calculated_usd": 0.8889346
+    }
+   },
+   "calculated_usd": 0.8889,
+   "claude_code_total_cost_usd": 0.8889346000000002
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-opus-5",
+  "repeat": 1,
+  "order_in_repeat": 2,
+  "workdir": "/private/tmp/opus-runs/T3-claude-opus-5-r1-1790513011",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 763.2,
+  "claude_duration_s": 760.4,
+  "num_turns": 67,
+  "tool_calls": 66,
+  "tool_calls_by_name": {
+   "Bash": 37,
+   "Read": 9,
+   "Write": 5,
+   "Edit": 15
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 112,
+     "cache_write_5m": 0,
+     "cache_write_1h": 67704,
+     "cache_read": 2408413,
+     "output": 35804,
+     "calculated_usd": 2.7769065
+    }
+   },
+   "calculated_usd": 2.7769,
+   "claude_code_total_cost_usd": 2.7769065
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-opus-5",
+  "repeat": 2,
+  "order_in_repeat": 1,
+  "workdir": "/private/tmp/opus-runs/T3-claude-opus-5-r2-1790514482",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 897.4,
+  "claude_duration_s": 893.0,
+  "num_turns": 52,
+  "tool_calls": 51,
+  "tool_calls_by_name": {
+   "Bash": 34,
+   "Read": 4,
+   "Edit": 8,
+   "Write": 5
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 90,
+     "cache_write_5m": 0,
+     "cache_write_1h": 57631,
+     "cache_read": 1645192,
+     "output": 34498,
+     "calculated_usd": 2.261806
+    }
+   },
+   "calculated_usd": 2.2618,
+   "claude_code_total_cost_usd": 2.261806
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ },
+ {
+  "task": "T3",
+  "model": "claude-opus-5",
+  "repeat": 3,
+  "order_in_repeat": 3,
+  "workdir": "/private/tmp/opus-runs/T3-claude-opus-5-r3-1790517825",
+  "timed_out": false,
+  "result_subtype": "success",
+  "wall_s": 695.0,
+  "claude_duration_s": 692.3,
+  "num_turns": 69,
+  "tool_calls": 68,
+  "tool_calls_by_name": {
+   "Bash": 31,
+   "Read": 12,
+   "Write": 4,
+   "Edit": 21
+  },
+  "permission_denials": 0,
+  "possible_leak": [],
+  "checks": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "all_passed": true,
+  "cost": {
+   "by_model": {
+    "claude-opus-5": {
+     "uncached_input": 116,
+     "cache_write_5m": 0,
+     "cache_write_1h": 70311,
+     "cache_read": 2645603,
+     "output": 39135,
+     "calculated_usd": 3.0048665
+    }
+   },
+   "calculated_usd": 3.0049,
+   "claude_code_total_cost_usd": 3.0048665000000008
+  },
+  "checks_original": {
+   "goodRecordIsPaidOnce": true,
+   "transientFailureRecovers": true,
+   "transientRetriesAreBoundedAndBackedOff": true,
+   "malformedRecordGoesStraightToTheDlt": true,
+   "unknownOrderIsNotRetried": true,
+   "goodRecordAfterAPoisonOneIsPaid": true,
+   "service_throws_not_found": true,
+   "own_tests_pass": true
+  }
+ }
+]

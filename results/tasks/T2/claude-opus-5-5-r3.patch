@@ -1,0 +1,740 @@
+diff --git a/src/main/java/dev/example/store/CustomerNotFoundException.java b/src/main/java/dev/example/store/CustomerNotFoundException.java
+new file mode 100644
+index 0000000..33a20d2
+--- /dev/null
++++ b/src/main/java/dev/example/store/CustomerNotFoundException.java
+@@ -0,0 +1,8 @@
++package dev.example.store;
++
++public class CustomerNotFoundException extends RuntimeException {
++
++    public CustomerNotFoundException(Long id) {
++        super("No customer " + id);
++    }
++}
+diff --git a/src/main/java/dev/example/store/CustomerOrderCount.java b/src/main/java/dev/example/store/CustomerOrderCount.java
+new file mode 100644
+index 0000000..03d594a
+--- /dev/null
++++ b/src/main/java/dev/example/store/CustomerOrderCount.java
+@@ -0,0 +1,4 @@
++package dev.example.store;
++
++public record CustomerOrderCount(Long customerId, long count) {
++}
+diff --git a/src/main/java/dev/example/store/Repositories.java b/src/main/java/dev/example/store/Repositories.java
+index c3d3c53..023647e 100644
+--- a/src/main/java/dev/example/store/Repositories.java
++++ b/src/main/java/dev/example/store/Repositories.java
+@@ -7,6 +7,7 @@ import org.springframework.data.domain.ScrollPosition;
+ import org.springframework.data.domain.Sort;
+ import org.springframework.data.domain.Window;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Query;
+ 
+ interface CustomerRepository extends JpaRepository<Customer, Long> {
+ }
+@@ -19,7 +20,16 @@ interface OrderRepository extends JpaRepository<Order, Long> {
+     // Keyset scrolling: the cursor is a position, not a page number.
+     Window<Order> findBy(ScrollPosition position, Limit limit, Sort sort);
+ 
++    Window<Order> findByCustomerId(Long customerId, ScrollPosition position, Limit limit,
++                                   Sort sort);
++
+     List<Order> findTop20ByOrderById();
++
++    // One grouped count for many customers. A customer with no orders has no row.
++    @Query("""
++            select new dev.example.store.CustomerOrderCount(o.customerId, count(o))
++            from Order o where o.customerId in :customerIds group by o.customerId""")
++    List<CustomerOrderCount> countByCustomerIdIn(Collection<Long> customerIds);
+ }
+ 
+ interface OrderLineRepository extends JpaRepository<OrderLine, Long> {
+diff --git a/src/main/java/dev/example/store/StoreController.java b/src/main/java/dev/example/store/StoreController.java
+index 53518f7..de0ca0b 100644
+--- a/src/main/java/dev/example/store/StoreController.java
++++ b/src/main/java/dev/example/store/StoreController.java
+@@ -55,6 +55,16 @@ public class StoreController {
+         return orders.findBy(position, Limit.of(count), Sort.by("id"));
+     }
+ 
++    @QueryMapping
++    public Window<Order> customerOrders(@Argument Long customerId, ScrollSubrange subrange) {
++        if (!customers.existsById(customerId)) {
++            throw new CustomerNotFoundException(customerId);
++        }
++        ScrollPosition position = subrange.position().orElse(ScrollPosition.keyset());
++        int count = subrange.count().orElse(10);
++        return orders.findByCustomerId(customerId, position, Limit.of(count), Sort.by("id"));
++    }
++
+     @MutationMapping
+     public Order shipOrder(@Argument Long id) {
+         Order order = service.ship(id);
+@@ -99,6 +109,19 @@ public class StoreController {
+                 Function.identity(), line -> byCode.get(line.getCode())));
+     }
+ 
++    // One grouped count query for every customer in the response.
++    @BatchMapping
++    public Map<Customer, Integer> orderCount(List<Customer> batch) {
++        Map<Long, Long> byCustomer = orders
++                .countByCustomerIdIn(batch.stream().map(Customer::getId).distinct().toList())
++                .stream()
++                .collect(Collectors.toMap(CustomerOrderCount::customerId,
++                        CustomerOrderCount::count));
++        return batch.stream().collect(Collectors.toMap(
++                Function.identity(),
++                customer -> byCustomer.getOrDefault(customer.getId(), 0L).intValue()));
++    }
++
+     // Schema evolution: the new field is added beside the old one, and the old
+     // one is deprecated rather than removed, so clients that ask for it keep working.
+     @SchemaMapping
+diff --git a/src/main/java/dev/example/store/StoreExceptionResolver.java b/src/main/java/dev/example/store/StoreExceptionResolver.java
+index 55f81ec..2a1595e 100644
+--- a/src/main/java/dev/example/store/StoreExceptionResolver.java
++++ b/src/main/java/dev/example/store/StoreExceptionResolver.java
+@@ -14,7 +14,7 @@ public class StoreExceptionResolver extends DataFetcherExceptionResolverAdapter
+ 
+     @Override
+     protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
+-        if (ex instanceof OrderNotFoundException) {
++        if (ex instanceof OrderNotFoundException || ex instanceof CustomerNotFoundException) {
+             return GraphqlErrorBuilder.newError(env)
+                     .errorType(ErrorType.NOT_FOUND)
+                     .message(ex.getMessage())
+diff --git a/src/main/resources/graphql/schema.graphqls b/src/main/resources/graphql/schema.graphqls
+index e1e7560..c55b963 100644
+--- a/src/main/resources/graphql/schema.graphqls
++++ b/src/main/resources/graphql/schema.graphqls
+@@ -1,6 +1,7 @@
+ type Query {
+     order(id: ID!): Order
+     orders(first: Int, after: String, last: Int, before: String): OrderConnection!
++    customerOrders(customerId: ID!, first: Int, after: String): OrderConnection!
+ }
+ 
+ type Mutation {
+@@ -39,6 +40,7 @@ type Customer {
+     name: String!
+     tier: String!
+     email: String
++    orderCount: Int!
+ }
+ 
+ enum OrderStatus {
+diff --git a/src/test/java/dev/example/store/CustomerOrdersTests.java b/src/test/java/dev/example/store/CustomerOrdersTests.java
+new file mode 100644
+index 0000000..e8b3f2d
+--- /dev/null
++++ b/src/test/java/dev/example/store/CustomerOrdersTests.java
+@@ -0,0 +1,134 @@
++package dev.example.store;
++
++import static org.assertj.core.api.Assertions.assertThat;
++import static org.mockito.ArgumentMatchers.any;
++import static org.mockito.ArgumentMatchers.anyLong;
++import static org.mockito.ArgumentMatchers.eq;
++import static org.mockito.BDDMockito.given;
++import static org.mockito.BDDMockito.then;
++import static org.mockito.Mockito.never;
++import static org.mockito.Mockito.times;
++
++import java.time.Instant;
++import java.util.Collection;
++import java.util.List;
++import java.util.Map;
++import org.junit.jupiter.api.Test;
++import org.mockito.ArgumentCaptor;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.boot.graphql.test.autoconfigure.GraphQlTest;
++import org.springframework.context.annotation.Import;
++import org.springframework.data.domain.KeysetScrollPosition;
++import org.springframework.data.domain.Limit;
++import org.springframework.data.domain.ScrollPosition;
++import org.springframework.data.domain.Sort;
++import org.springframework.data.domain.Window;
++import org.springframework.graphql.execution.ErrorType;
++import org.springframework.graphql.test.tester.GraphQlTester;
++import org.springframework.test.context.bean.override.mockito.MockitoBean;
++import org.springframework.test.util.ReflectionTestUtils;
++
++@GraphQlTest(StoreController.class)
++@Import(StoreExceptionResolver.class)
++class CustomerOrdersTests {
++
++    @Autowired
++    GraphQlTester graphQlTester;
++
++    @MockitoBean OrderRepository orders;
++    @MockitoBean OrderLineRepository lines;
++    @MockitoBean CustomerRepository customers;
++    @MockitoBean ItemRepository items;
++    @MockitoBean OrderService service;
++
++    private static Order order(long id, long customerId) {
++        Order order = new Order(customerId, 3_000, Instant.parse("2026-09-01T10:00:00Z"));
++        ReflectionTestUtils.setField(order, "id", id);
++        return order;
++    }
++
++    private static Window<Order> window(List<Order> content, boolean hasNext) {
++        return Window.from(content,
++                i -> ScrollPosition.forward(Map.of("id", content.get(i).getId())), hasNext);
++    }
++
++    @Test
++    void orderCountsForManyCustomersComeFromOneQuery() {
++        given(orders.findBy(any(), any(), any())).willReturn(window(List.of(
++                order(1, 1), order(2, 2), order(3, 3), order(4, 1)), false));
++        given(customers.findAllById(any())).willReturn(List.of(
++                new Customer(1L, "Ada", "ada@example.com", "GOLD"),
++                new Customer(2L, "Grace", "grace@example.com", "SILVER"),
++                new Customer(3L, "Linus", "linus@example.com", "BRONZE")));
++        given(orders.countByCustomerIdIn(any())).willReturn(List.of(
++                new CustomerOrderCount(1L, 10), new CustomerOrderCount(2L, 7)));
++
++        graphQlTester.document("{ orders { edges { node { customer { id orderCount } } } } }")
++                .execute()
++                .path("orders.edges[*].node.customer.orderCount")
++                .entityList(Integer.class).containsExactly(10, 7, 0, 10);
++
++        @SuppressWarnings("unchecked")
++        ArgumentCaptor<Collection<Long>> ids = ArgumentCaptor.forClass(Collection.class);
++        then(orders).should(times(1)).countByCustomerIdIn(ids.capture());
++        assertThat(ids.getValue()).containsExactlyInAnyOrder(1L, 2L, 3L);
++    }
++
++    @Test
++    void customerOrdersDefaultsToTenOrderedById() {
++        given(customers.existsById(1L)).willReturn(true);
++        given(orders.findByCustomerId(anyLong(), any(), any(), any()))
++                .willReturn(window(List.of(order(1, 1), order(4, 1)), false));
++
++        graphQlTester.document("{ customerOrders(customerId: 1) { edges { node { id } } "
++                        + "pageInfo { hasNextPage } } }")
++                .execute()
++                .path("customerOrders.edges[*].node.id")
++                .entityList(String.class).containsExactly("1", "4")
++                .path("customerOrders.pageInfo.hasNextPage").entity(Boolean.class).isEqualTo(false);
++
++        then(orders).should().findByCustomerId(
++                eq(1L), eq(ScrollPosition.keyset()), eq(Limit.of(10)), eq(Sort.by("id")));
++    }
++
++    @Test
++    void customerOrdersContinuesFromTheCursor() {
++        given(customers.existsById(1L)).willReturn(true);
++        given(orders.findByCustomerId(anyLong(), any(), any(), any()))
++                .willReturn(window(List.of(order(1, 1), order(4, 1)), true));
++
++        String endCursor = graphQlTester
++                .document("{ customerOrders(customerId: 1, first: 2) { pageInfo { endCursor } } }")
++                .execute()
++                .path("customerOrders.pageInfo.endCursor").entity(String.class).get();
++
++        graphQlTester.document("query($after: String) { customerOrders(customerId: 1, "
++                        + "first: 2, after: $after) { edges { node { id } } } }")
++                .variable("after", endCursor)
++                .execute()
++                .errors().verify();
++
++        ArgumentCaptor<ScrollPosition> positions = ArgumentCaptor.forClass(ScrollPosition.class);
++        then(orders).should(times(2)).findByCustomerId(
++                eq(1L), positions.capture(), eq(Limit.of(2)), eq(Sort.by("id")));
++        ScrollPosition next = positions.getAllValues().get(1);
++        assertThat(next).isInstanceOf(KeysetScrollPosition.class);
++        KeysetScrollPosition keyset = (KeysetScrollPosition) next;
++        assertThat(keyset.scrollsForward()).isTrue();
++        assertThat(keyset.getKeys().get("id")).hasToString("4");
++    }
++
++    @Test
++    void customerOrdersForAnUnknownCustomerIsNotFound() {
++        given(customers.existsById(42L)).willReturn(false);
++
++        graphQlTester.document("{ customerOrders(customerId: 42) { edges { node { id } } } }")
++                .execute()
++                .errors()
++                .expect(error -> error.getErrorType() == ErrorType.NOT_FOUND
++                        && error.getMessage().contains("No customer 42"))
++                .verify();
++
++        then(orders).should(never()).findByCustomerId(anyLong(), any(), any(), any());
++    }
++}
+diff --git a/target/classes/application.properties b/target/classes/application.properties
+new file mode 100644
+index 0000000..92eae44
+--- /dev/null
++++ b/target/classes/application.properties
+@@ -0,0 +1,13 @@
++spring.application.name=store
++server.port=8201
++
++spring.datasource.url=jdbc:postgresql://localhost:${POSTGRES_PORT:5441}/store
++spring.datasource.username=store
++spring.datasource.password=store
++spring.jpa.hibernate.ddl-auto=create-drop
++spring.jpa.open-in-view=false
++
++spring.graphql.http.path=/graphql
++spring.graphql.websocket.path=/graphql-ws
++# Production posture: the schema is not advertised to anyone who asks.
++spring.graphql.schema.introspection.enabled=false
+diff --git a/target/classes/dev/example/store/Customer.class b/target/classes/dev/example/store/Customer.class
+new file mode 100644
+index 0000000..7e0d789
+Binary files /dev/null and b/target/classes/dev/example/store/Customer.class differ
+diff --git a/target/classes/dev/example/store/CustomerNotFoundException.class b/target/classes/dev/example/store/CustomerNotFoundException.class
+new file mode 100644
+index 0000000..0da78a5
+Binary files /dev/null and b/target/classes/dev/example/store/CustomerNotFoundException.class differ
+diff --git a/target/classes/dev/example/store/CustomerOrderCount.class b/target/classes/dev/example/store/CustomerOrderCount.class
+new file mode 100644
+index 0000000..ded88f8
+Binary files /dev/null and b/target/classes/dev/example/store/CustomerOrderCount.class differ
+diff --git a/target/classes/dev/example/store/CustomerRepository.class b/target/classes/dev/example/store/CustomerRepository.class
+new file mode 100644
+index 0000000..1547f53
+Binary files /dev/null and b/target/classes/dev/example/store/CustomerRepository.class differ
+diff --git a/target/classes/dev/example/store/GraphQlLimits.class b/target/classes/dev/example/store/GraphQlLimits.class
+new file mode 100644
+index 0000000..c6e0676
+Binary files /dev/null and b/target/classes/dev/example/store/GraphQlLimits.class differ
+diff --git a/target/classes/dev/example/store/Item.class b/target/classes/dev/example/store/Item.class
+new file mode 100644
+index 0000000..7dcebc2
+Binary files /dev/null and b/target/classes/dev/example/store/Item.class differ
+diff --git a/target/classes/dev/example/store/ItemRepository.class b/target/classes/dev/example/store/ItemRepository.class
+new file mode 100644
+index 0000000..4adab9b
+Binary files /dev/null and b/target/classes/dev/example/store/ItemRepository.class differ
+diff --git a/target/classes/dev/example/store/Order.class b/target/classes/dev/example/store/Order.class
+new file mode 100644
+index 0000000..1ff553e
+Binary files /dev/null and b/target/classes/dev/example/store/Order.class differ
+diff --git a/target/classes/dev/example/store/OrderLine.class b/target/classes/dev/example/store/OrderLine.class
+new file mode 100644
+index 0000000..8c940d5
+Binary files /dev/null and b/target/classes/dev/example/store/OrderLine.class differ
+diff --git a/target/classes/dev/example/store/OrderLineRepository.class b/target/classes/dev/example/store/OrderLineRepository.class
+new file mode 100644
+index 0000000..895350e
+Binary files /dev/null and b/target/classes/dev/example/store/OrderLineRepository.class differ
+diff --git a/target/classes/dev/example/store/OrderNotFoundException.class b/target/classes/dev/example/store/OrderNotFoundException.class
+new file mode 100644
+index 0000000..5b732bb
+Binary files /dev/null and b/target/classes/dev/example/store/OrderNotFoundException.class differ
+diff --git a/target/classes/dev/example/store/OrderRepository.class b/target/classes/dev/example/store/OrderRepository.class
+new file mode 100644
+index 0000000..617b766
+Binary files /dev/null and b/target/classes/dev/example/store/OrderRepository.class differ
+diff --git a/target/classes/dev/example/store/OrderRestController$LineDetail.class b/target/classes/dev/example/store/OrderRestController$LineDetail.class
+new file mode 100644
+index 0000000..0e313cc
+Binary files /dev/null and b/target/classes/dev/example/store/OrderRestController$LineDetail.class differ
+diff --git a/target/classes/dev/example/store/OrderRestController$OrderDetail.class b/target/classes/dev/example/store/OrderRestController$OrderDetail.class
+new file mode 100644
+index 0000000..dfb6dd8
+Binary files /dev/null and b/target/classes/dev/example/store/OrderRestController$OrderDetail.class differ
+diff --git a/target/classes/dev/example/store/OrderRestController$OrderSummary.class b/target/classes/dev/example/store/OrderRestController$OrderSummary.class
+new file mode 100644
+index 0000000..d9c6870
+Binary files /dev/null and b/target/classes/dev/example/store/OrderRestController$OrderSummary.class differ
+diff --git a/target/classes/dev/example/store/OrderRestController.class b/target/classes/dev/example/store/OrderRestController.class
+new file mode 100644
+index 0000000..9629b29
+Binary files /dev/null and b/target/classes/dev/example/store/OrderRestController.class differ
+diff --git a/target/classes/dev/example/store/OrderService.class b/target/classes/dev/example/store/OrderService.class
+new file mode 100644
+index 0000000..798b311
+Binary files /dev/null and b/target/classes/dev/example/store/OrderService.class differ
+diff --git a/target/classes/dev/example/store/OrderStatus.class b/target/classes/dev/example/store/OrderStatus.class
+new file mode 100644
+index 0000000..78268de
+Binary files /dev/null and b/target/classes/dev/example/store/OrderStatus.class differ
+diff --git a/target/classes/dev/example/store/PlaceOrderInput$LineInput.class b/target/classes/dev/example/store/PlaceOrderInput$LineInput.class
+new file mode 100644
+index 0000000..23f99bb
+Binary files /dev/null and b/target/classes/dev/example/store/PlaceOrderInput$LineInput.class differ
+diff --git a/target/classes/dev/example/store/PlaceOrderInput.class b/target/classes/dev/example/store/PlaceOrderInput.class
+new file mode 100644
+index 0000000..fc46331
+Binary files /dev/null and b/target/classes/dev/example/store/PlaceOrderInput.class differ
+diff --git a/target/classes/dev/example/store/SecurityConfig.class b/target/classes/dev/example/store/SecurityConfig.class
+new file mode 100644
+index 0000000..a76c0c2
+Binary files /dev/null and b/target/classes/dev/example/store/SecurityConfig.class differ
+diff --git a/target/classes/dev/example/store/SeedData.class b/target/classes/dev/example/store/SeedData.class
+new file mode 100644
+index 0000000..85a349f
+Binary files /dev/null and b/target/classes/dev/example/store/SeedData.class differ
+diff --git a/target/classes/dev/example/store/StoreApplication.class b/target/classes/dev/example/store/StoreApplication.class
+new file mode 100644
+index 0000000..113379f
+Binary files /dev/null and b/target/classes/dev/example/store/StoreApplication.class differ
+diff --git a/target/classes/dev/example/store/StoreController.class b/target/classes/dev/example/store/StoreController.class
+new file mode 100644
+index 0000000..cf1c7d7
+Binary files /dev/null and b/target/classes/dev/example/store/StoreController.class differ
+diff --git a/target/classes/dev/example/store/StoreExceptionResolver.class b/target/classes/dev/example/store/StoreExceptionResolver.class
+new file mode 100644
+index 0000000..faa1ec4
+Binary files /dev/null and b/target/classes/dev/example/store/StoreExceptionResolver.class differ
+diff --git a/target/classes/graphql/schema.graphqls b/target/classes/graphql/schema.graphqls
+new file mode 100644
+index 0000000..c55b963
+--- /dev/null
++++ b/target/classes/graphql/schema.graphqls
+@@ -0,0 +1,50 @@
++type Query {
++    order(id: ID!): Order
++    orders(first: Int, after: String, last: Int, before: String): OrderConnection!
++    customerOrders(customerId: ID!, first: Int, after: String): OrderConnection!
++}
++
++type Mutation {
++    shipOrder(id: ID!): Order!
++}
++
++type Subscription {
++    orderStatus(orderId: ID!): Order!
++}
++
++type Order {
++    id: ID!
++    status: OrderStatus!
++    total: Int! @deprecated(reason: "Renamed to amount")
++    amount: Int!
++    placedAt: String!
++    customer: Customer!
++    lines: [OrderLine!]!
++}
++
++type OrderLine {
++    quantity: Int!
++    unitPrice: Int!
++    item: Item!
++}
++
++type Item {
++    code: ID!
++    name: String!
++    description: String!
++    price: Int!
++}
++
++type Customer {
++    id: ID!
++    name: String!
++    tier: String!
++    email: String
++    orderCount: Int!
++}
++
++enum OrderStatus {
++    PLACED
++    PAID
++    SHIPPED
++}
+diff --git a/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst b/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+new file mode 100644
+index 0000000..6637be6
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+@@ -0,0 +1,25 @@
++dev/example/store/StoreApplication.class
++dev/example/store/CustomerNotFoundException.class
++dev/example/store/OrderRestController.class
++dev/example/store/PlaceOrderInput.class
++dev/example/store/OrderService.class
++dev/example/store/ItemRepository.class
++dev/example/store/CustomerOrderCount.class
++dev/example/store/CustomerRepository.class
++dev/example/store/SecurityConfig.class
++dev/example/store/SeedData.class
++dev/example/store/OrderLineRepository.class
++dev/example/store/StoreExceptionResolver.class
++dev/example/store/OrderRepository.class
++dev/example/store/OrderNotFoundException.class
++dev/example/store/Order.class
++dev/example/store/OrderRestController$OrderDetail.class
++dev/example/store/Item.class
++dev/example/store/OrderLine.class
++dev/example/store/GraphQlLimits.class
++dev/example/store/PlaceOrderInput$LineInput.class
++dev/example/store/Customer.class
++dev/example/store/OrderRestController$OrderSummary.class
++dev/example/store/OrderStatus.class
++dev/example/store/StoreController.class
++dev/example/store/OrderRestController$LineDetail.class
+diff --git a/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst b/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+new file mode 100644
+index 0000000..d898bf2
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+@@ -0,0 +1,18 @@
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/Customer.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/CustomerNotFoundException.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/CustomerOrderCount.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/GraphQlLimits.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/Item.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/Order.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/OrderLine.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/OrderNotFoundException.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/OrderRestController.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/OrderService.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/OrderStatus.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/PlaceOrderInput.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/Repositories.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/SecurityConfig.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/SeedData.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/StoreApplication.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/StoreController.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/main/java/dev/example/store/StoreExceptionResolver.java
+diff --git a/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+new file mode 100644
+index 0000000..780061a
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+@@ -0,0 +1,2 @@
++dev/example/store/StoreControllerTests.class
++dev/example/store/CustomerOrdersTests.class
+diff --git a/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+new file mode 100644
+index 0000000..dcc43fe
+--- /dev/null
++++ b/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+@@ -0,0 +1,2 @@
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/test/java/dev/example/store/CustomerOrdersTests.java
++/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/src/test/java/dev/example/store/StoreControllerTests.java
+diff --git a/target/surefire-reports/TEST-dev.example.store.CustomerOrdersTests.xml b/target/surefire-reports/TEST-dev.example.store.CustomerOrdersTests.xml
+new file mode 100644
+index 0000000..dfd46df
+--- /dev/null
++++ b/target/surefire-reports/TEST-dev.example.store.CustomerOrdersTests.xml
+@@ -0,0 +1,107 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="dev.example.store.CustomerOrdersTests" time="2.21" tests="4" errors="0" skipped="0" failures="0" flakes="0">
++  <properties>
++    <property name="java.specification.version" value="25"/>
++    <property name="sun.jnu.encoding" value="UTF-8"/>
++    <property name="java.class.path" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/test-classes:/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-websocket/4.1.1/spring-boot-starter-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-websocket/4.1.1/spring-boot-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-websocket/7.0.9/spring-websocket-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security/4.1.1/spring-boot-starter-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security/4.1.1/spring-boot-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-config/7.1.1/spring-security-config-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-core/7.1.1/spring-security-core-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-crypto/7.1.1/spring-security-crypto-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security-test/4.1.1/spring-boot-starter-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security-test/4.1.1/spring-boot-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-test/7.1.1/spring-security-test-7.1.1.jar:"/>
++    <property name="java.vm.vendor" value="Amazon.com Inc."/>
++    <property name="sun.arch.data.model" value="64"/>
++    <property name="java.vendor.url" value="https://aws.amazon.com/corretto/"/>
++    <property name="user.timezone" value="Africa/Harare"/>
++    <property name="org.jboss.logging.provider" value="slf4j"/>
++    <property name="os.name" value="Mac OS X"/>
++    <property name="java.vm.specification.version" value="25"/>
++    <property name="APPLICATION_NAME" value="store"/>
++    <property name="sun.java.launcher" value="SUN_STANDARD"/>
++    <property name="user.country" value="ZW"/>
++    <property name="sun.boot.library.path" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn/lib"/>
++    <property name="sun.java.command" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/surefire/surefirebooter-20260927142859779_3.jar /private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/surefire 2026-09-27T14-28-59_721-jvmRun1 surefire-20260927142859779_1tmp surefire_0-20260927142859779_2tmp"/>
++    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="jdk.debug" value="release"/>
++    <property name="surefire.test.class.path" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/test-classes:/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-websocket/4.1.1/spring-boot-starter-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-websocket/4.1.1/spring-boot-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-websocket/7.0.9/spring-websocket-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security/4.1.1/spring-boot-starter-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security/4.1.1/spring-boot-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-config/7.1.1/spring-security-config-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-core/7.1.1/spring-security-core-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-crypto/7.1.1/spring-security-crypto-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security-test/4.1.1/spring-boot-starter-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security-test/4.1.1/spring-boot-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-test/7.1.1/spring-security-test-7.1.1.jar:"/>
++    <property name="sun.cpu.endian" value="little"/>
++    <property name="user.home" value="/Users/developer"/>
++    <property name="user.language" value="en"/>
++    <property name="java.specification.vendor" value="Oracle Corporation"/>
++    <property name="java.version.date" value="2026-07-21"/>
++    <property name="java.home" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn"/>
++    <property name="file.separator" value="/"/>
++    <property name="basedir" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054"/>
++    <property name="java.vm.compressedOopsMode" value="Zero based"/>
++    <property name="line.separator" value="&#10;"/>
++    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
++    <property name="java.specification.name" value="Java Platform API Specification"/>
++    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
++    <property name="java.awt.headless" value="true"/>
++    <property name="apple.awt.application.name" value="ForkedBooter"/>
++    <property name="surefire.real.class.path" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/surefire/surefirebooter-20260927142859779_3.jar"/>
++    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
++    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.runtime.version" value="25.0.4+7-LTS"/>
++    <property name="user.name" value="developer"/>
++    <property name="stdout.encoding" value="UTF-8"/>
++    <property name="path.separator" value=":"/>
++    <property name="os.version" value="26.4.1"/>
++    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
++    <property name="file.encoding" value="UTF-8"/>
++    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
++    <property name="java.vendor.version" value="Corretto-25.0.4.7.1"/>
++    <property name="localRepository" value="/Users/developer/.m2/repository"/>
++    <property name="java.vendor.url.bug" value="https://github.com/corretto/corretto-25/issues/"/>
++    <property name="java.io.tmpdir" value="/var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/"/>
++    <property name="java.version" value="25.0.4"/>
++    <property name="user.dir" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054"/>
++    <property name="os.arch" value="aarch64"/>
++    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
++    <property name="PID" value="83579"/>
++    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
++    <property name="native.encoding" value="UTF-8"/>
++    <property name="java.library.path" value="/Users/developer/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
++    <property name="java.vm.info" value="mixed mode, sharing"/>
++    <property name="stderr.encoding" value="UTF-8"/>
++    <property name="java.vendor" value="Amazon.com Inc."/>
++    <property name="java.vm.version" value="25.0.4+7-LTS"/>
++    <property name="stdin.encoding" value="UTF-8"/>
++    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
++    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.class.version" value="69.0"/>
++    <property name="LOGGED_APPLICATION_NAME" value="[store] "/>
++  </properties>
++  <testcase name="customerOrdersForAnUnknownCustomerIsNotFound" classname="dev.example.store.CustomerOrdersTests" time="0.109">
++    <system-out><![CDATA[14:29:00.628 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [dev.example.store.CustomerOrdersTests]: CustomerOrdersTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
++14:29:00.756 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration dev.example.store.StoreApplication for test class dev.example.store.CustomerOrdersTests
++14:29:00.758 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [dev.example.store.CustomerOrdersTests]: CustomerOrdersTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
++14:29:00.764 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration dev.example.store.StoreApplication for test class dev.example.store.CustomerOrdersTests
++
++  .   ____          _            __ _ _
++ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
++( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
++ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
++  '  |____| .__|_| |_|_| |_\__, | / / / /
++ =========|_|==============|___/=/_/_/_/
++
++ :: Spring Boot ::                (v4.1.1)
++
++2026-09-27T14:29:00.982+02:00  INFO 83579 --- [store] [           main] dev.example.store.CustomerOrdersTests    : Starting CustomerOrdersTests using Java 25.0.4 with PID 83579 (started by developer in /private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054)
++2026-09-27T14:29:00.983+02:00  INFO 83579 --- [store] [           main] dev.example.store.CustomerOrdersTests    : No active profile set, falling back to 1 default profile: "default"
++2026-09-27T14:29:02.243+02:00  INFO 83579 --- [store] [           main] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
++2026-09-27T14:29:02.340+02:00  INFO 83579 --- [store] [           main] o.s.b.g.a.GraphQlAutoConfiguration       : GraphQL schema inspection:
++	Unmapped fields: {}
++	Unmapped registrations: {}
++	Unmapped arguments: {}
++	Field nullness errors: {}
++	Argument nullness errors: {}
++	Skipped types: []
++2026-09-27T14:29:02.403+02:00  INFO 83579 --- [store] [           main] dev.example.store.CustomerOrdersTests    : Started CustomerOrdersTests in 1.592 seconds (process running for 2.56)
++]]></system-out>
++    <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
++WARNING: A Java agent has been loaded dynamically (/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
++WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
++WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
++WARNING: Dynamic loading of agents will be disallowed by default in a future release
++]]></system-err>
++  </testcase>
++  <testcase name="customerOrdersDefaultsToTenOrderedById" classname="dev.example.store.CustomerOrdersTests" time="0.072"/>
++  <testcase name="orderCountsForManyCustomersComeFromOneQuery" classname="dev.example.store.CustomerOrdersTests" time="0.049"/>
++  <testcase name="customerOrdersContinuesFromTheCursor" classname="dev.example.store.CustomerOrdersTests" time="0.015"/>
++</testsuite>
+\ No newline at end of file
+diff --git a/target/surefire-reports/TEST-dev.example.store.StoreControllerTests.xml b/target/surefire-reports/TEST-dev.example.store.StoreControllerTests.xml
+new file mode 100644
+index 0000000..a0d13f0
+--- /dev/null
++++ b/target/surefire-reports/TEST-dev.example.store.StoreControllerTests.xml
+@@ -0,0 +1,78 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="dev.example.store.StoreControllerTests" time="0.034" tests="2" errors="0" skipped="0" failures="0" flakes="0">
++  <properties>
++    <property name="java.specification.version" value="25"/>
++    <property name="sun.jnu.encoding" value="UTF-8"/>
++    <property name="java.class.path" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/test-classes:/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-websocket/4.1.1/spring-boot-starter-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-websocket/4.1.1/spring-boot-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-websocket/7.0.9/spring-websocket-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security/4.1.1/spring-boot-starter-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security/4.1.1/spring-boot-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-config/7.1.1/spring-security-config-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-core/7.1.1/spring-security-core-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-crypto/7.1.1/spring-security-crypto-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security-test/4.1.1/spring-boot-starter-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security-test/4.1.1/spring-boot-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-test/7.1.1/spring-security-test-7.1.1.jar:"/>
++    <property name="java.vm.vendor" value="Amazon.com Inc."/>
++    <property name="sun.arch.data.model" value="64"/>
++    <property name="java.vendor.url" value="https://aws.amazon.com/corretto/"/>
++    <property name="user.timezone" value="Africa/Harare"/>
++    <property name="org.jboss.logging.provider" value="slf4j"/>
++    <property name="os.name" value="Mac OS X"/>
++    <property name="java.vm.specification.version" value="25"/>
++    <property name="APPLICATION_NAME" value="store"/>
++    <property name="sun.java.launcher" value="SUN_STANDARD"/>
++    <property name="user.country" value="ZW"/>
++    <property name="sun.boot.library.path" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn/lib"/>
++    <property name="sun.java.command" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/surefire/surefirebooter-20260927142859779_3.jar /private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/surefire 2026-09-27T14-28-59_721-jvmRun1 surefire-20260927142859779_1tmp surefire_0-20260927142859779_2tmp"/>
++    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="jdk.debug" value="release"/>
++    <property name="surefire.test.class.path" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/test-classes:/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/classes:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql/4.1.1/spring-boot-starter-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38.jar:/Users/developer/.m2/repository/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.jar:/Users/developer/.m2/repository/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.jar:/Users/developer/.m2/repository/org/slf4j/jul-to-slf4j/2.0.18/jul-to-slf4j-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.jar:/Users/developer/.m2/repository/org/yaml/snakeyaml/2.6/snakeyaml-2.6.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.jar:/Users/developer/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.jar:/Users/developer/.m2/repository/tools/jackson/core/jackson-core/3.1.5/jackson-core-3.1.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-reactor/4.1.1/spring-boot-reactor-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-context/7.0.9/spring-context-7.0.9.jar:/Users/developer/.m2/repository/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.jar:/Users/developer/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/developer/.m2/repository/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql/4.1.1/spring-boot-graphql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql/2.0.5/spring-graphql-2.0.5.jar:/Users/developer/.m2/repository/com/graphql-java/graphql-java/25.0/graphql-java-25.0.jar:/Users/developer/.m2/repository/com/graphql-java/java-dataloader/6.0.0/java-dataloader-6.0.0.jar:/Users/developer/.m2/repository/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc/4.1.1/spring-boot-starter-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.jar:/Users/developer/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-web/7.0.9/spring-web-7.0.9.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.jar:/Users/developer/.m2/repository/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.jar:/Users/developer/.m2/repository/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar:/Users/developer/.m2/repository/org/slf4j/slf4j-api/2.0.18/slf4j-api-2.0.18.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-commons/4.1.1/spring-data-commons-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.jar:/Users/developer/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.jar:/Users/developer/.m2/repository/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.jar:/Users/developer/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar:/Users/developer/.m2/repository/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.jar:/Users/developer/.m2/repository/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-runtime/4.0.9/jaxb-runtime-4.0.9.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.9/jaxb-core-4.0.9.jar:/Users/developer/.m2/repository/org/eclipse/angus/angus-activation/2.0.3/angus-activation-2.0.3.jar:/Users/developer/.m2/repository/org/glassfish/jaxb/txw2/4.0.9/txw2-4.0.9.jar:/Users/developer/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar:/Users/developer/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.jar:/Users/developer/.m2/repository/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/data/spring-data-jpa/4.1.1/spring-data-jpa-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.jar:/Users/developer/.m2/repository/org/antlr/antlr4-runtime/4.13.2/antlr4-runtime-4.13.2.jar:/Users/developer/.m2/repository/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.jar:/Users/developer/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-websocket/4.1.1/spring-boot-starter-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-websocket/4.1.1/spring-boot-websocket-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-websocket/7.0.9/spring-websocket-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security/4.1.1/spring-boot-starter-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security/4.1.1/spring-boot-security-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-config/7.1.1/spring-security-config-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-core/7.1.1/spring-security-core-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-crypto/7.1.1/spring-security-crypto-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/spring-core/7.0.9/spring-core-7.0.9.jar:/Users/developer/.m2/repository/commons-logging/commons-logging/1.3.6/commons-logging-1.3.6.jar:/Users/developer/.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar:/Users/developer/.m2/repository/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-graphql-test/4.1.1/spring-boot-starter-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-test/4.1.1/spring-boot-starter-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test/4.1.1/spring-boot-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/4.1.1/spring-boot-test-autoconfigure-4.1.1.jar:/Users/developer/.m2/repository/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.jar:/Users/developer/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.5/jakarta.xml.bind-api-4.0.5.jar:/Users/developer/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.jar:/Users/developer/.m2/repository/net/minidev/json-smart/2.6.0/json-smart-2.6.0.jar:/Users/developer/.m2/repository/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.jar:/Users/developer/.m2/repository/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar:/Users/developer/.m2/repository/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/Users/developer/.m2/repository/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.jar:/Users/developer/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.jar:/Users/developer/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.jar:/Users/developer/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.jar:/Users/developer/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.jar:/Users/developer/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar:/Users/developer/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar:/Users/developer/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/developer/.m2/repository/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.jar:/Users/developer/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/developer/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/developer/.m2/repository/org/springframework/spring-test/7.0.9/spring-test-7.0.9.jar:/Users/developer/.m2/repository/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-jackson-test/4.1.1/spring-boot-starter-jackson-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-graphql-test/4.1.1/spring-boot-graphql-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/graphql/spring-graphql-test/2.0.5/spring-graphql-test-2.0.5.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webtestclient/4.1.1/spring-boot-webtestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-http-codec/4.1.1/spring-boot-http-codec-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/spring-webflux/7.0.9/spring-webflux-7.0.9.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.1/spring-boot-starter-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-webmvc-test/4.1.1/spring-boot-webmvc-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-resttestclient/4.1.1/spring-boot-resttestclient-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-starter-security-test/4.1.1/spring-boot-starter-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/boot/spring-boot-security-test/4.1.1/spring-boot-security-test-4.1.1.jar:/Users/developer/.m2/repository/org/springframework/security/spring-security-test/7.1.1/spring-security-test-7.1.1.jar:"/>
++    <property name="sun.cpu.endian" value="little"/>
++    <property name="user.home" value="/Users/developer"/>
++    <property name="user.language" value="en"/>
++    <property name="java.specification.vendor" value="Oracle Corporation"/>
++    <property name="java.version.date" value="2026-07-21"/>
++    <property name="java.home" value="/Users/developer/.sdkman/candidates/java/25.0.4-amzn"/>
++    <property name="file.separator" value="/"/>
++    <property name="basedir" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054"/>
++    <property name="java.vm.compressedOopsMode" value="Zero based"/>
++    <property name="line.separator" value="&#10;"/>
++    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
++    <property name="java.specification.name" value="Java Platform API Specification"/>
++    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
++    <property name="java.awt.headless" value="true"/>
++    <property name="apple.awt.application.name" value="ForkedBooter"/>
++    <property name="surefire.real.class.path" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054/target/surefire/surefirebooter-20260927142859779_3.jar"/>
++    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
++    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.runtime.version" value="25.0.4+7-LTS"/>
++    <property name="user.name" value="developer"/>
++    <property name="stdout.encoding" value="UTF-8"/>
++    <property name="path.separator" value=":"/>
++    <property name="os.version" value="26.4.1"/>
++    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
++    <property name="file.encoding" value="UTF-8"/>
++    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
++    <property name="java.vendor.version" value="Corretto-25.0.4.7.1"/>
++    <property name="localRepository" value="/Users/developer/.m2/repository"/>
++    <property name="java.vendor.url.bug" value="https://github.com/corretto/corretto-25/issues/"/>
++    <property name="java.io.tmpdir" value="/var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/"/>
++    <property name="java.version" value="25.0.4"/>
++    <property name="user.dir" value="/private/tmp/opus-runs/T2-claude-opus-5-5-r3-1790512054"/>
++    <property name="os.arch" value="aarch64"/>
++    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
++    <property name="PID" value="83579"/>
++    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
++    <property name="native.encoding" value="UTF-8"/>
++    <property name="java.library.path" value="/Users/developer/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
++    <property name="java.vm.info" value="mixed mode, sharing"/>
++    <property name="stderr.encoding" value="UTF-8"/>
++    <property name="java.vendor" value="Amazon.com Inc."/>
++    <property name="java.vm.version" value="25.0.4+7-LTS"/>
++    <property name="stdin.encoding" value="UTF-8"/>
++    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
++    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
++    <property name="java.class.version" value="69.0"/>
++    <property name="LOGGED_APPLICATION_NAME" value="[store] "/>
++  </properties>
++  <testcase name="aMissingOrderIsNotFound" classname="dev.example.store.StoreControllerTests" time="0.007">
++    <system-out><![CDATA[2026-09-27T14:29:02.670+02:00  INFO 83579 --- [store] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [dev.example.store.StoreControllerTests]: StoreControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
++2026-09-27T14:29:02.677+02:00  INFO 83579 --- [store] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration dev.example.store.StoreApplication for test class dev.example.store.StoreControllerTests
++2026-09-27T14:29:02.677+02:00  INFO 83579 --- [store] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [dev.example.store.StoreControllerTests]: StoreControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
++2026-09-27T14:29:02.681+02:00  INFO 83579 --- [store] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration dev.example.store.StoreApplication for test class dev.example.store.StoreControllerTests
++]]></system-out>
++  </testcase>
++  <testcase name="returnsTheFieldsAskedFor" classname="dev.example.store.StoreControllerTests" time="0.006"/>
++</testsuite>
+\ No newline at end of file
+diff --git a/target/surefire-reports/dev.example.store.CustomerOrdersTests.txt b/target/surefire-reports/dev.example.store.CustomerOrdersTests.txt
+new file mode 100644
+index 0000000..e02de59
+--- /dev/null
++++ b/target/surefire-reports/dev.example.store.CustomerOrdersTests.txt
+@@ -0,0 +1,4 @@
++-------------------------------------------------------------------------------
++Test set: dev.example.store.CustomerOrdersTests
++-------------------------------------------------------------------------------
++Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.210 s -- in dev.example.store.CustomerOrdersTests
+diff --git a/target/surefire-reports/dev.example.store.StoreControllerTests.txt b/target/surefire-reports/dev.example.store.StoreControllerTests.txt
+new file mode 100644
+index 0000000..f1ad0dd
+--- /dev/null
++++ b/target/surefire-reports/dev.example.store.StoreControllerTests.txt
+@@ -0,0 +1,4 @@
++-------------------------------------------------------------------------------
++Test set: dev.example.store.StoreControllerTests
++-------------------------------------------------------------------------------
++Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.034 s -- in dev.example.store.StoreControllerTests
+diff --git a/target/test-classes/dev/example/store/CustomerOrdersTests.class b/target/test-classes/dev/example/store/CustomerOrdersTests.class
+new file mode 100644
+index 0000000..b34408c
+Binary files /dev/null and b/target/test-classes/dev/example/store/CustomerOrdersTests.class differ
+diff --git a/target/test-classes/dev/example/store/StoreControllerTests.class b/target/test-classes/dev/example/store/StoreControllerTests.class
+new file mode 100644
+index 0000000..3c5dca4
+Binary files /dev/null and b/target/test-classes/dev/example/store/StoreControllerTests.class differ

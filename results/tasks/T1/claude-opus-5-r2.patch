@@ -1,0 +1,326 @@
+diff --git a/charges b/charges
+new file mode 100755
+index 0000000..7fa9cc5
+Binary files /dev/null and b/charges differ
+diff --git a/handlers.go b/handlers.go
+index 606b0d3..a3bc0c8 100644
+--- a/handlers.go
++++ b/handlers.go
+@@ -6,6 +6,7 @@ import (
+ 	"errors"
+ 	"net/http"
+ 	"strconv"
++	"strings"
+ 	"time"
+ )
+ 
+@@ -16,6 +17,7 @@ type Charges interface {
+ 	Create(ctx context.Context, in NewCharge) (Charge, error)
+ 	Get(ctx context.Context, id int64) (Charge, error)
+ 	Latest(ctx context.Context) (Charge, error)
++	List(ctx context.Context, currency string) ([]Charge, error)
+ 	Report(ctx context.Context, seconds int) error
+ }
+ 
+@@ -77,6 +79,41 @@ func (h *Handlers) latest(w http.ResponseWriter, r *http.Request) {
+ 	h.respond(w, r, h.charges.Latest)
+ }
+ 
++func (h *Handlers) list(w http.ResponseWriter, r *http.Request) {
++	currency, ok := normaliseCurrency(r.URL.Query().Get("currency"))
++	if !ok {
++		http.Error(w, "currency must be three letters", http.StatusBadRequest)
++		return
++	}
++	charges, err := h.charges.List(r.Context(), currency)
++	if err != nil {
++		http.Error(w, err.Error(), http.StatusInternalServerError)
++		return
++	}
++	if charges == nil {
++		// A nil slice encodes as null; the response is always an array.
++		charges = []Charge{}
++	}
++	writeJSON(w, http.StatusOK, charges)
++}
++
++// normaliseCurrency upper cases a three letter code. An absent parameter is
++// valid and means no filter; anything else is rejected before any query runs.
++func normaliseCurrency(currency string) (string, bool) {
++	if currency == "" {
++		return "", true
++	}
++	if len(currency) != 3 {
++		return "", false
++	}
++	for _, c := range currency {
++		if !('a' <= c && c <= 'z') && !('A' <= c && c <= 'Z') {
++			return "", false
++		}
++	}
++	return strings.ToUpper(currency), true
++}
++
+ func (h *Handlers) respond(w http.ResponseWriter, r *http.Request,
+ 	load func(context.Context) (Charge, error)) {
+ 	p, err := load(r.Context())
+diff --git a/handlers_test.go b/handlers_test.go
+index bd929bd..1537c61 100644
+--- a/handlers_test.go
++++ b/handlers_test.go
+@@ -2,14 +2,23 @@ package main
+ 
+ import (
+ 	"context"
++	"encoding/json"
+ 	"net/http"
+ 	"net/http/httptest"
++	"net/url"
++	"reflect"
+ 	"strings"
+ 	"testing"
+ )
+ 
+ // fakeCharges satisfies Charges with no database and no container.
+-type fakeCharges struct{ created []NewCharge }
++type fakeCharges struct {
++	created []NewCharge
++	// listed records the currency each List call asked for, so a test can
++	// tell "no filter" from "not queried at all".
++	listed []string
++	all    []Charge
++}
+ 
+ func (f *fakeCharges) Create(_ context.Context, in NewCharge) (Charge, error) {
+ 	f.created = append(f.created, in)
+@@ -24,6 +33,11 @@ func (f *fakeCharges) Latest(context.Context) (Charge, error) {
+ 	return Charge{}, nil
+ }
+ 
++func (f *fakeCharges) List(_ context.Context, currency string) ([]Charge, error) {
++	f.listed = append(f.listed, currency)
++	return f.all, nil
++}
++
+ func (f *fakeCharges) Report(context.Context, int) error { return nil }
+ 
+ type noReceipts struct{}
+@@ -61,3 +75,72 @@ func TestPositiveAmountIsCreated(t *testing.T) {
+ 		t.Fatalf("status = %d, created = %d", rec.Code, len(fake.created))
+ 	}
+ }
++
++func listRequest(t *testing.T, fake *fakeCharges, target string) *httptest.ResponseRecorder {
++	t.Helper()
++	h := NewHandlers(fake, noReceipts{})
++	rec := httptest.NewRecorder()
++	h.list(rec, httptest.NewRequest(http.MethodGet, target, nil))
++	return rec
++}
++
++func TestListWithNoChargesIsAnEmptyArray(t *testing.T) {
++	fake := &fakeCharges{}
++	rec := listRequest(t, fake, "/charges")
++
++	if rec.Code != http.StatusOK {
++		t.Fatalf("status = %d, want 200", rec.Code)
++	}
++	if got := strings.TrimSpace(rec.Body.String()); got != "[]" {
++		t.Fatalf("body = %s, want []", got)
++	}
++	if len(fake.listed) != 1 || fake.listed[0] != "" {
++		t.Fatalf("List called with %q, want one call with no filter", fake.listed)
++	}
++}
++
++func TestListReturnsChargesAsAnArray(t *testing.T) {
++	fake := &fakeCharges{all: []Charge{
++		{ID: 1, Amount: 500, Currency: "USD", Status: "CAPTURED"},
++		{ID: 2, Amount: 700, Currency: "USD", Status: "CAPTURED"},
++	}}
++	rec := listRequest(t, fake, "/charges")
++
++	var got []Charge
++	if err := json.Unmarshal(rec.Body.Bytes(), &got); err != nil {
++		t.Fatalf("decode %s: %v", rec.Body.String(), err)
++	}
++	if !reflect.DeepEqual(got, fake.all) {
++		t.Fatalf("charges = %+v, want %+v", got, fake.all)
++	}
++}
++
++func TestListNormalisesTheCurrencyFilter(t *testing.T) {
++	for _, currency := range []string{"usd", "USD", "uSd"} {
++		fake := &fakeCharges{}
++		rec := listRequest(t, fake, "/charges?currency="+currency)
++
++		if rec.Code != http.StatusOK {
++			t.Fatalf("currency=%s: status = %d, want 200", currency, rec.Code)
++		}
++		if len(fake.listed) != 1 || fake.listed[0] != "USD" {
++			t.Fatalf("currency=%s: List called with %q, want [USD]",
++				currency, fake.listed)
++		}
++	}
++}
++
++func TestListRejectsABadCurrencyWithoutQuerying(t *testing.T) {
++	for _, currency := range []string{"US", "USDD", "US1", "US-", "$$$", "€ur", " USD"} {
++		fake := &fakeCharges{}
++		rec := listRequest(t, fake, "/charges?currency="+url.QueryEscape(currency))
++
++		if rec.Code != http.StatusBadRequest {
++			t.Errorf("currency=%q: status = %d, want 400", currency, rec.Code)
++		}
++		if len(fake.listed) != 0 {
++			t.Errorf("currency=%q: List was called %d time(s) for a rejected filter",
++				currency, len(fake.listed))
++		}
++	}
++}
+diff --git a/heldout_list_test.go b/heldout_list_test.go
+new file mode 100644
+index 0000000..f0e827d
+--- /dev/null
++++ b/heldout_list_test.go
+@@ -0,0 +1,67 @@
++package main
++
++// Held out from the model: copied in only after the run finishes.
++
++import (
++	"context"
++	"net/http"
++	"net/http/httptest"
++	"strings"
++	"testing"
++)
++
++type heldOutCharges struct {
++	called   bool
++	currency string
++}
++
++func (h *heldOutCharges) Create(context.Context, NewCharge) (Charge, error) { return Charge{}, nil }
++func (h *heldOutCharges) Get(context.Context, int64) (Charge, error)       { return Charge{}, nil }
++func (h *heldOutCharges) Latest(context.Context) (Charge, error)           { return Charge{}, nil }
++func (h *heldOutCharges) Report(context.Context, int) error                { return nil }
++func (h *heldOutCharges) List(_ context.Context, currency string) ([]Charge, error) {
++	h.called, h.currency = true, currency
++	return nil, nil
++}
++
++type heldOutReceipts struct{}
++
++func (heldOutReceipts) SendAsync(context.Context, Charge) {}
++
++func heldOutList(t *testing.T, url string) (*heldOutCharges, *httptest.ResponseRecorder) {
++	t.Helper()
++	fake := &heldOutCharges{}
++	h := NewHandlers(fake, heldOutReceipts{})
++	rec := httptest.NewRecorder()
++	h.list(rec, httptest.NewRequest(http.MethodGet, url, nil))
++	return fake, rec
++}
++
++func TestHeldOutLowercaseCurrencyIsNormalised(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges?currency=usd")
++	if rec.Code != http.StatusOK || !fake.called || fake.currency != "USD" {
++		t.Fatalf("code=%d called=%v currency=%q", rec.Code, fake.called, fake.currency)
++	}
++}
++
++func TestHeldOutNoFilterReturnsEmptyArray(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges")
++	body := strings.TrimSpace(rec.Body.String())
++	if rec.Code != http.StatusOK || fake.currency != "" || body != "[]" {
++		t.Fatalf("code=%d currency=%q body=%q", rec.Code, fake.currency, body)
++	}
++}
++
++func TestHeldOutTwoLettersIsRejected(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges?currency=US")
++	if rec.Code != http.StatusBadRequest || fake.called {
++		t.Fatalf("code=%d called=%v", rec.Code, fake.called)
++	}
++}
++
++func TestHeldOutSymbolIsRejected(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges?currency=u%24d")
++	if rec.Code != http.StatusBadRequest || fake.called {
++		t.Fatalf("code=%d called=%v", rec.Code, fake.called)
++	}
++}
+diff --git a/main.go b/main.go
+index 1d5194a..999dd88 100644
+--- a/main.go
++++ b/main.go
+@@ -35,6 +35,7 @@ func main() {
+ 	handlers := NewHandlers(charges, receipts)
+ 
+ 	mux := http.NewServeMux()
++	mux.HandleFunc("GET /charges", handlers.list)
+ 	mux.HandleFunc("GET /charges/{id}", handlers.get)
+ 	mux.HandleFunc("GET /charges/latest", handlers.latest)
+ 	mux.HandleFunc("POST /charges", handlers.create)
+diff --git a/service.go b/service.go
+index 436b3da..14251f5 100644
+--- a/service.go
++++ b/service.go
+@@ -50,6 +50,10 @@ func (s *ChargeService) Latest(ctx context.Context) (Charge, error) {
+ 	return s.store.Latest(ctx)
+ }
+ 
++func (s *ChargeService) List(ctx context.Context, currency string) ([]Charge, error) {
++	return s.store.List(ctx, currency)
++}
++
+ func (s *ChargeService) Report(ctx context.Context, seconds int) error {
+ 	return s.store.Sleep(ctx, seconds)
+ }
+diff --git a/store.go b/store.go
+index c7ad37e..20f5e9b 100644
+--- a/store.go
++++ b/store.go
+@@ -53,6 +53,41 @@ func (s *Store) Latest(ctx context.Context) (Charge, error) {
+ 		ORDER BY id DESC LIMIT 1`)
+ }
+ 
++// listLimit caps every page, so one client cannot ask for the whole table.
++const listLimit = 50
++
++// List returns charges oldest first. An empty currency means no filter; the
++// caller has already normalised it.
++func (s *Store) List(ctx context.Context, currency string) ([]Charge, error) {
++	query := `SELECT id, amount, currency, status FROM charges
++		ORDER BY id ASC LIMIT $1`
++	args := []any{listLimit}
++	if currency != "" {
++		query = `SELECT id, amount, currency, status FROM charges
++			WHERE currency = $2 ORDER BY id ASC LIMIT $1`
++		args = append(args, currency)
++	}
++	rows, err := s.db.QueryContext(ctx, query, args...)
++	if err != nil {
++		return nil, fmt.Errorf("list charges: %w", err)
++	}
++	defer rows.Close()
++
++	// Non-nil so an empty result encodes as [] rather than null.
++	charges := []Charge{}
++	for rows.Next() {
++		var p Charge
++		if err := rows.Scan(&p.ID, &p.Amount, &p.Currency, &p.Status); err != nil {
++			return nil, fmt.Errorf("list charges: %w", err)
++		}
++		charges = append(charges, p)
++	}
++	if err := rows.Err(); err != nil {
++		return nil, fmt.Errorf("list charges: %w", err)
++	}
++	return charges, nil
++}
++
+ func (s *Store) one(ctx context.Context, query string, args ...any) (Charge, error) {
+ 	var p Charge
+ 	err := s.db.QueryRowContext(ctx, query, args...).

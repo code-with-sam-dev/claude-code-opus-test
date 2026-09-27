@@ -1,0 +1,335 @@
+diff --git a/handlers.go b/handlers.go
+index 606b0d3..0ca50fa 100644
+--- a/handlers.go
++++ b/handlers.go
+@@ -16,6 +16,9 @@ type Charges interface {
+ 	Create(ctx context.Context, in NewCharge) (Charge, error)
+ 	Get(ctx context.Context, id int64) (Charge, error)
+ 	Latest(ctx context.Context) (Charge, error)
++	// List returns up to 50 charges by ascending id. An empty currency means
++	// no filter; otherwise it is an upper-case ISO code such as "USD".
++	List(ctx context.Context, currency string) ([]Charge, error)
+ 	Report(ctx context.Context, seconds int) error
+ }
+ 
+@@ -77,6 +80,48 @@ func (h *Handlers) latest(w http.ResponseWriter, r *http.Request) {
+ 	h.respond(w, r, h.charges.Latest)
+ }
+ 
++// list serves GET /charges. The optional currency query parameter must be
++// three letters, in any case, and is normalised to upper case before it
++// reaches the store. Anything else is rejected without a query.
++func (h *Handlers) list(w http.ResponseWriter, r *http.Request) {
++	currency, ok := normaliseCurrency(r.URL.Query().Get("currency"))
++	if !ok {
++		http.Error(w, "currency must be three letters", http.StatusBadRequest)
++		return
++	}
++	ps, err := h.charges.List(r.Context(), currency)
++	if err != nil {
++		http.Error(w, err.Error(), http.StatusInternalServerError)
++		return
++	}
++	if ps == nil {
++		ps = []Charge{} // encodes as [] rather than null
++	}
++	writeJSON(w, http.StatusOK, ps)
++}
++
++// normaliseCurrency accepts the empty string (no filter) or exactly three
++// ASCII letters, and returns the code upper-cased.
++func normaliseCurrency(s string) (string, bool) {
++	if s == "" {
++		return "", true
++	}
++	if len(s) != 3 {
++		return "", false
++	}
++	b := []byte(s)
++	for i, c := range b {
++		switch {
++		case c >= 'A' && c <= 'Z':
++		case c >= 'a' && c <= 'z':
++			b[i] = c - 'a' + 'A'
++		default:
++			return "", false
++		}
++	}
++	return string(b), true
++}
++
+ func (h *Handlers) respond(w http.ResponseWriter, r *http.Request,
+ 	load func(context.Context) (Charge, error)) {
+ 	p, err := load(r.Context())
+diff --git a/handlers_test.go b/handlers_test.go
+index bd929bd..01098f3 100644
+--- a/handlers_test.go
++++ b/handlers_test.go
+@@ -2,14 +2,25 @@ package main
+ 
+ import (
+ 	"context"
++	"encoding/json"
+ 	"net/http"
+ 	"net/http/httptest"
++	"net/url"
+ 	"strings"
+ 	"testing"
+ )
+ 
+ // fakeCharges satisfies Charges with no database and no container.
+-type fakeCharges struct{ created []NewCharge }
++type fakeCharges struct {
++	created []NewCharge
++	listed  []string // currencies List was called with
++	charges []Charge // what List returns
++}
++
++func (f *fakeCharges) List(_ context.Context, currency string) ([]Charge, error) {
++	f.listed = append(f.listed, currency)
++	return f.charges, nil
++}
+ 
+ func (f *fakeCharges) Create(_ context.Context, in NewCharge) (Charge, error) {
+ 	f.created = append(f.created, in)
+@@ -61,3 +72,102 @@ func TestPositiveAmountIsCreated(t *testing.T) {
+ 		t.Fatalf("status = %d, created = %d", rec.Code, len(fake.created))
+ 	}
+ }
++
++func TestListWithNoChargesReturnsEmptyArray(t *testing.T) {
++	fake := &fakeCharges{}
++	h := NewHandlers(fake, noReceipts{})
++	req := httptest.NewRequest(http.MethodGet, "/charges", nil)
++	rec := httptest.NewRecorder()
++
++	h.list(rec, req)
++
++	if rec.Code != http.StatusOK {
++		t.Fatalf("status = %d, want 200", rec.Code)
++	}
++	if body := strings.TrimSpace(rec.Body.String()); body != "[]" {
++		t.Fatalf("body = %q, want []", body)
++	}
++	if len(fake.listed) != 1 || fake.listed[0] != "" {
++		t.Fatalf("List called with %q, want one call with empty currency", fake.listed)
++	}
++}
++
++func TestListReturnsChargesAsJSONArray(t *testing.T) {
++	fake := &fakeCharges{charges: []Charge{
++		{ID: 1, Amount: 5, Currency: "USD", Status: "CAPTURED"},
++		{ID: 2, Amount: 7, Currency: "USD", Status: "CAPTURED"},
++	}}
++	h := NewHandlers(fake, noReceipts{})
++	req := httptest.NewRequest(http.MethodGet, "/charges", nil)
++	rec := httptest.NewRecorder()
++
++	h.list(rec, req)
++
++	if rec.Code != http.StatusOK {
++		t.Fatalf("status = %d, want 200", rec.Code)
++	}
++	if ct := rec.Header().Get("Content-Type"); ct != "application/json" {
++		t.Fatalf("Content-Type = %q", ct)
++	}
++	var got []Charge
++	if err := json.Unmarshal(rec.Body.Bytes(), &got); err != nil {
++		t.Fatalf("body is not a JSON array: %v: %s", err, rec.Body.String())
++	}
++	if len(got) != 2 || got[0].ID != 1 || got[1].ID != 2 {
++		t.Fatalf("got %+v", got)
++	}
++}
++
++func TestListCurrencyIsNormalisedToUpperCase(t *testing.T) {
++	for _, in := range []string{"usd", "USD", "uSd"} {
++		fake := &fakeCharges{}
++		h := NewHandlers(fake, noReceipts{})
++		req := httptest.NewRequest(http.MethodGet, "/charges?currency="+in, nil)
++		rec := httptest.NewRecorder()
++
++		h.list(rec, req)
++
++		if rec.Code != http.StatusOK {
++			t.Fatalf("%q: status = %d, want 200", in, rec.Code)
++		}
++		if len(fake.listed) != 1 || fake.listed[0] != "USD" {
++			t.Fatalf("%q: List called with %q, want [USD]", in, fake.listed)
++		}
++	}
++}
++
++func TestListRejectsBadCurrencyWithoutQuerying(t *testing.T) {
++	for _, in := range []string{"us", "usdd", "us1", "u$d", "€ur", "   ", "U D"} {
++		fake := &fakeCharges{}
++		h := NewHandlers(fake, noReceipts{})
++		req := httptest.NewRequest(http.MethodGet,
++			"/charges?currency="+url.QueryEscape(in), nil)
++		rec := httptest.NewRecorder()
++
++		h.list(rec, req)
++
++		if rec.Code != http.StatusBadRequest {
++			t.Fatalf("%q: status = %d, want 400", in, rec.Code)
++		}
++		if len(fake.listed) != 0 {
++			t.Fatalf("%q: List was called %d time(s) for a rejected currency",
++				in, len(fake.listed))
++		}
++	}
++}
++
++func TestListIsRoutedAlongsideLatestAndGet(t *testing.T) {
++	fake := &fakeCharges{}
++	h := NewHandlers(fake, noReceipts{})
++	mux := http.NewServeMux()
++	mux.HandleFunc("GET /charges", h.list)
++	mux.HandleFunc("GET /charges/{id}", h.get)
++	mux.HandleFunc("GET /charges/latest", h.latest)
++
++	rec := httptest.NewRecorder()
++	mux.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/charges?currency=eur", nil))
++
++	if rec.Code != http.StatusOK || len(fake.listed) != 1 || fake.listed[0] != "EUR" {
++		t.Fatalf("status = %d, listed = %q", rec.Code, fake.listed)
++	}
++}
+diff --git a/heldout_list_test.go b/heldout_list_test.go
+new file mode 100644
+index 0000000..f0e827d
+--- /dev/null
++++ b/heldout_list_test.go
+@@ -0,0 +1,67 @@
++package main
++
++// Held out from the model: copied in only after the run finishes.
++
++import (
++	"context"
++	"net/http"
++	"net/http/httptest"
++	"strings"
++	"testing"
++)
++
++type heldOutCharges struct {
++	called   bool
++	currency string
++}
++
++func (h *heldOutCharges) Create(context.Context, NewCharge) (Charge, error) { return Charge{}, nil }
++func (h *heldOutCharges) Get(context.Context, int64) (Charge, error)       { return Charge{}, nil }
++func (h *heldOutCharges) Latest(context.Context) (Charge, error)           { return Charge{}, nil }
++func (h *heldOutCharges) Report(context.Context, int) error                { return nil }
++func (h *heldOutCharges) List(_ context.Context, currency string) ([]Charge, error) {
++	h.called, h.currency = true, currency
++	return nil, nil
++}
++
++type heldOutReceipts struct{}
++
++func (heldOutReceipts) SendAsync(context.Context, Charge) {}
++
++func heldOutList(t *testing.T, url string) (*heldOutCharges, *httptest.ResponseRecorder) {
++	t.Helper()
++	fake := &heldOutCharges{}
++	h := NewHandlers(fake, heldOutReceipts{})
++	rec := httptest.NewRecorder()
++	h.list(rec, httptest.NewRequest(http.MethodGet, url, nil))
++	return fake, rec
++}
++
++func TestHeldOutLowercaseCurrencyIsNormalised(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges?currency=usd")
++	if rec.Code != http.StatusOK || !fake.called || fake.currency != "USD" {
++		t.Fatalf("code=%d called=%v currency=%q", rec.Code, fake.called, fake.currency)
++	}
++}
++
++func TestHeldOutNoFilterReturnsEmptyArray(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges")
++	body := strings.TrimSpace(rec.Body.String())
++	if rec.Code != http.StatusOK || fake.currency != "" || body != "[]" {
++		t.Fatalf("code=%d currency=%q body=%q", rec.Code, fake.currency, body)
++	}
++}
++
++func TestHeldOutTwoLettersIsRejected(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges?currency=US")
++	if rec.Code != http.StatusBadRequest || fake.called {
++		t.Fatalf("code=%d called=%v", rec.Code, fake.called)
++	}
++}
++
++func TestHeldOutSymbolIsRejected(t *testing.T) {
++	fake, rec := heldOutList(t, "/charges?currency=u%24d")
++	if rec.Code != http.StatusBadRequest || fake.called {
++		t.Fatalf("code=%d called=%v", rec.Code, fake.called)
++	}
++}
+diff --git a/main.go b/main.go
+index 1d5194a..999dd88 100644
+--- a/main.go
++++ b/main.go
+@@ -35,6 +35,7 @@ func main() {
+ 	handlers := NewHandlers(charges, receipts)
+ 
+ 	mux := http.NewServeMux()
++	mux.HandleFunc("GET /charges", handlers.list)
+ 	mux.HandleFunc("GET /charges/{id}", handlers.get)
+ 	mux.HandleFunc("GET /charges/latest", handlers.latest)
+ 	mux.HandleFunc("POST /charges", handlers.create)
+diff --git a/service.go b/service.go
+index 436b3da..14251f5 100644
+--- a/service.go
++++ b/service.go
+@@ -50,6 +50,10 @@ func (s *ChargeService) Latest(ctx context.Context) (Charge, error) {
+ 	return s.store.Latest(ctx)
+ }
+ 
++func (s *ChargeService) List(ctx context.Context, currency string) ([]Charge, error) {
++	return s.store.List(ctx, currency)
++}
++
+ func (s *ChargeService) Report(ctx context.Context, seconds int) error {
+ 	return s.store.Sleep(ctx, seconds)
+ }
+diff --git a/store.go b/store.go
+index c7ad37e..3698d14 100644
+--- a/store.go
++++ b/store.go
+@@ -53,6 +53,33 @@ func (s *Store) Latest(ctx context.Context) (Charge, error) {
+ 		ORDER BY id DESC LIMIT 1`)
+ }
+ 
++// List returns up to 50 charges by ascending id. An empty currency means no
++// filter, which the query expresses as a parameter rather than as a second
++// statement, so there is one query and it is fully parameterised.
++func (s *Store) List(ctx context.Context, currency string) ([]Charge, error) {
++	rows, err := s.db.QueryContext(ctx,
++		`SELECT id, amount, currency, status FROM charges
++		 WHERE $1 = '' OR currency = $1
++		 ORDER BY id ASC LIMIT 50`, currency)
++	if err != nil {
++		return nil, fmt.Errorf("list charges: %w", err)
++	}
++	defer rows.Close()
++
++	ps := []Charge{}
++	for rows.Next() {
++		var p Charge
++		if err := rows.Scan(&p.ID, &p.Amount, &p.Currency, &p.Status); err != nil {
++			return nil, fmt.Errorf("scan charge: %w", err)
++		}
++		ps = append(ps, p)
++	}
++	if err := rows.Err(); err != nil {
++		return nil, fmt.Errorf("list charges: %w", err)
++	}
++	return ps, nil
++}
++
+ func (s *Store) one(ctx context.Context, query string, args ...any) (Charge, error) {
+ 	var p Charge
+ 	err := s.db.QueryRowContext(ctx, query, args...).

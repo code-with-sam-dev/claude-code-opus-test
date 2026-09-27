@@ -1,0 +1,58 @@
+{
+ "task": "T2",
+ "model": "claude-fable-5-1",
+ "repeat": 2,
+ "order_in_repeat": 2,
+ "workdir": "/private/tmp/opus-runs/T2-claude-fable-5-1-r2-1790511377",
+ "timed_out": false,
+ "result_subtype": "success",
+ "wall_s": 172.3,
+ "claude_duration_s": 169.7,
+ "num_turns": 33,
+ "tool_calls": 32,
+ "tool_calls_by_name": {
+  "Bash": 4,
+  "Read": 18,
+  "Edit": 7,
+  "Write": 3
+ },
+ "permission_denials": 0,
+ "possible_leak": [],
+ "checks": {
+  "orderCountIsCorrect": true,
+  "orderCountIsBatched": true,
+  "firstPageOfOneCustomer": true,
+  "nextPageContinuesFromTheCursor": true,
+  "defaultPageIsTen": true,
+  "unknownCustomerIsNotFound": true,
+  "nestedFieldsStayBatched": true,
+  "regression": true
+ },
+ "checks_passed": 8,
+ "checks_total": 8,
+ "all_passed": true,
+ "cost": {
+  "by_model": {
+   "claude-fable-5-1": {
+    "uncached_input": 226,
+    "cache_write_5m": 0,
+    "cache_write_1h": 46673,
+    "cache_read": 231608,
+    "output": 14320,
+    "calculated_usd": 1.709622
+   }
+  },
+  "calculated_usd": 1.7096,
+  "claude_code_total_cost_usd": 1.709622
+ },
+ "checks_original": {
+  "orderCountIsCorrect": true,
+  "orderCountIsBatched": true,
+  "firstPageOfOneCustomer": true,
+  "nextPageContinuesFromTheCursor": true,
+  "defaultPageIsTen": true,
+  "unknownCustomerIsNotFound": true,
+  "nestedFieldsStayBatched": true,
+  "regression": true
+ }
+}
