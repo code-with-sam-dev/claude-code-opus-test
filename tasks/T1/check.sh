@@ -14,7 +14,8 @@ for t in TestNegativeAmountIsRejectedAndNotCreated TestPositiveAmountIsCreated; 
 done
 echo "$out" | grep -q "VET_EXIT=0" || regress=false
 store=$(awk '/func \(s \*Store\) List/,/^}/' "$W/store.go")
-param=false; echo "$store" | grep -q '\$1' && ! echo "$store" | grep -q 'Sprintf' && param=true
+# The currency value must reach SQL only as a bind parameter (checks/param_check.py).
+param=$(python3 "$HERE/checks/param_check.py" "$store")
 limit=false; echo "$store" | grep -qi 'limit' && { echo "$store" | grep -q '50' || grep -qE '=[[:space:]]*50\b' "$W/store.go"; } && limit=true
 route=false; grep -q '"GET /charges"' "$W/main.go" && route=true
 cat <<JSON
