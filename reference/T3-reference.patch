@@ -1,0 +1,51 @@
+diff -ruN --exclude=target --exclude=.check.log base/src/main/java/dev/example/orders/KafkaErrorHandling.java /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DkkZFjMi1W/src/main/java/dev/example/orders/KafkaErrorHandling.java
+--- base/src/main/java/dev/example/orders/KafkaErrorHandling.java	1970-01-01 02:00:00
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DkkZFjMi1W/src/main/java/dev/example/orders/KafkaErrorHandling.java	2026-09-27 13:21:04
+@@ -0,0 +1,23 @@
++package dev.example.orders;
++
++import org.apache.kafka.common.TopicPartition;
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.Configuration;
++import org.springframework.kafka.core.KafkaTemplate;
++import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
++import org.springframework.kafka.listener.DefaultErrorHandler;
++import org.springframework.util.backoff.FixedBackOff;
++import tools.jackson.core.JacksonException;
++
++@Configuration
++public class KafkaErrorHandling {
++
++    @Bean
++    DefaultErrorHandler errorHandler(KafkaTemplate<String, String> template) {
++        var recoverer = new DeadLetterPublishingRecoverer(template,
++                (record, ex) -> new TopicPartition(record.topic() + ".DLT", record.partition()));
++        var handler = new DefaultErrorHandler(recoverer, new FixedBackOff(200, 3));
++        handler.addNotRetryableExceptions(OrderNotFoundException.class, JacksonException.class);
++        return handler;
++    }
++}
+diff -ruN --exclude=target --exclude=.check.log base/src/main/java/dev/example/orders/OrderNotFoundException.java /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DkkZFjMi1W/src/main/java/dev/example/orders/OrderNotFoundException.java
+--- base/src/main/java/dev/example/orders/OrderNotFoundException.java	1970-01-01 02:00:00
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DkkZFjMi1W/src/main/java/dev/example/orders/OrderNotFoundException.java	2026-09-27 13:21:04
+@@ -0,0 +1,8 @@
++package dev.example.orders;
++
++public class OrderNotFoundException extends RuntimeException {
++
++    public OrderNotFoundException(String orderId) {
++        super("No order " + orderId);
++    }
++}
+diff -ruN --exclude=target --exclude=.check.log base/src/main/java/dev/example/orders/OrderService.java /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DkkZFjMi1W/src/main/java/dev/example/orders/OrderService.java
+--- base/src/main/java/dev/example/orders/OrderService.java	2026-09-27 13:16:39
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DkkZFjMi1W/src/main/java/dev/example/orders/OrderService.java	2026-09-27 13:21:04
+@@ -48,7 +48,7 @@
+     public void markPaid(PaymentSettled event) {
+         Order order = orders.findById(Long.valueOf(event.orderId()))
+                 .orElseThrow(() ->
+-                        new IllegalStateException("No order " + event.orderId()));
++                        new OrderNotFoundException(event.orderId()));
+         order.markPaid();
+     }
+ }

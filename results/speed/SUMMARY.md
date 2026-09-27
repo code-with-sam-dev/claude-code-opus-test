@@ -7,9 +7,9 @@ Prompt: the numbers one to four hundred as words, one per line.
 | | Opus 5.5 | Opus 5 |
 |---|---|---|
 | Text tokens per second, median (range) | 159.9 (159.2 to 163.5) | 136.0 (135.9 to 136.3), 9 valid runs |
-| All output tokens per second, thinking included, median | 161.4 | 127.6 |
-| Time to first text, median | 3.4 s | 11.4 s |
-| Thinking tokens, typical | about 60 | about 480 to 710 |
+| All output tokens per second, thinking included, median | 161.4 | 127.8 (9 valid runs) |
+| Time to first text, median | 3.45 s | 11.12 s (9 valid runs) |
+| Thinking tokens, median (range) | 64 (56 to 203) | 673 (479 to 1,113), 9 valid runs |
 | Text tokens, typical | about 3,390 | about 3,390 |
 
 Ratio of medians, text streaming: 1.18. Every paired repeat gives 1.17 to 1.20.

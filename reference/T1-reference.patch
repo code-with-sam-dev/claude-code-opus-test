@@ -1,0 +1,120 @@
+diff -ru --exclude=.check.log --exclude=heldout_list_test.go base/handlers.go /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/handlers.go
+--- base/handlers.go	2026-09-27 13:06:38
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/handlers.go	2026-09-27 13:08:30
+@@ -6,6 +6,7 @@
+ 	"errors"
+ 	"net/http"
+ 	"strconv"
++	"strings"
+ 	"time"
+ )
+ 
+@@ -17,6 +18,7 @@
+ 	Get(ctx context.Context, id int64) (Charge, error)
+ 	Latest(ctx context.Context) (Charge, error)
+ 	Report(ctx context.Context, seconds int) error
++	List(ctx context.Context, currency string) ([]Charge, error)
+ }
+ 
+ type ReceiptSender interface {
+@@ -60,6 +62,35 @@
+ 	// cancellation. WithoutCancel keeps its values and drops its lifetime.
+ 	h.receipts.SendAsync(context.WithoutCancel(r.Context()), p)
+ 	writeJSON(w, http.StatusCreated, p)
++}
++
++func (h *Handlers) list(w http.ResponseWriter, r *http.Request) {
++	currency := strings.ToUpper(r.URL.Query().Get("currency"))
++	if currency != "" && !isCurrency(currency) {
++		http.Error(w, "currency must be three letters", http.StatusBadRequest)
++		return
++	}
++	cs, err := h.charges.List(r.Context(), currency)
++	if err != nil {
++		http.Error(w, err.Error(), http.StatusInternalServerError)
++		return
++	}
++	if cs == nil {
++		cs = []Charge{}
++	}
++	writeJSON(w, http.StatusOK, cs)
++}
++
++func isCurrency(s string) bool {
++	if len(s) != 3 {
++		return false
++	}
++	for _, c := range s {
++		if c < 'A' || c > 'Z' {
++			return false
++		}
++	}
++	return true
+ }
+ 
+ func (h *Handlers) get(w http.ResponseWriter, r *http.Request) {
+diff -ru --exclude=.check.log --exclude=heldout_list_test.go base/handlers_test.go /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/handlers_test.go
+--- base/handlers_test.go	2026-09-27 13:06:38
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/handlers_test.go	2026-09-27 13:08:30
+@@ -26,6 +26,8 @@
+ 
+ func (f *fakeCharges) Report(context.Context, int) error { return nil }
+ 
++func (f *fakeCharges) List(context.Context, string) ([]Charge, error) { return nil, nil }
++
+ type noReceipts struct{}
+ 
+ func (noReceipts) SendAsync(context.Context, Charge) {}
+diff -ru --exclude=.check.log --exclude=heldout_list_test.go base/main.go /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/main.go
+--- base/main.go	2026-09-27 13:06:38
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/main.go	2026-09-27 13:08:30
+@@ -37,6 +37,7 @@
+ 	mux := http.NewServeMux()
+ 	mux.HandleFunc("GET /charges/{id}", handlers.get)
+ 	mux.HandleFunc("GET /charges/latest", handlers.latest)
++	mux.HandleFunc("GET /charges", handlers.list)
+ 	mux.HandleFunc("POST /charges", handlers.create)
+ 	mux.HandleFunc("GET /reports/slow", handlers.slow)
+ 
+diff -ru --exclude=.check.log --exclude=heldout_list_test.go base/service.go /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/service.go
+--- base/service.go	2026-09-27 13:06:38
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/service.go	2026-09-27 13:08:30
+@@ -42,6 +42,10 @@
+ 	return p, tx.Commit()
+ }
+ 
++func (s *ChargeService) List(ctx context.Context, currency string) ([]Charge, error) {
++	return s.store.List(ctx, currency)
++}
++
+ func (s *ChargeService) Get(ctx context.Context, id int64) (Charge, error) {
+ 	return s.store.Get(ctx, id)
+ }
+diff -ru --exclude=.check.log --exclude=heldout_list_test.go base/store.go /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/store.go
+--- base/store.go	2026-09-27 13:06:38
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.kJ4Hazo9t7/store.go	2026-09-27 13:08:30
+@@ -66,6 +66,24 @@
+ 	return p, nil
+ }
+ 
++func (s *Store) List(ctx context.Context, currency string) ([]Charge, error) {
++	rows, err := s.db.QueryContext(ctx, `SELECT id, amount, currency, status FROM charges
++		WHERE $1 = '' OR currency = $1 ORDER BY id LIMIT 50`, currency)
++	if err != nil {
++		return nil, err
++	}
++	defer rows.Close()
++	var out []Charge
++	for rows.Next() {
++		var c Charge
++		if err := rows.Scan(&c.ID, &c.Amount, &c.Currency, &c.Status); err != nil {
++			return nil, err
++		}
++		out = append(out, c)
++	}
++	return out, rows.Err()
++}
++
+ // Sleep stands in for a report query that takes seconds.
+ func (s *Store) Sleep(ctx context.Context, seconds int) error {
+ 	_, err := s.db.ExecContext(ctx, `SELECT pg_sleep($1)`, seconds)

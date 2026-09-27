@@ -1,0 +1,96 @@
+diff -ruN --exclude=target --exclude=.check.log base/src/main/java/dev/example/store/CustomerNotFoundException.java /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/CustomerNotFoundException.java
+--- base/src/main/java/dev/example/store/CustomerNotFoundException.java	1970-01-01 02:00:00
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/CustomerNotFoundException.java	2026-09-27 13:14:59
+@@ -0,0 +1,8 @@
++package dev.example.store;
++
++public class CustomerNotFoundException extends RuntimeException {
++
++    public CustomerNotFoundException(Long id) {
++        super("No customer " + id);
++    }
++}
+diff -ruN --exclude=target --exclude=.check.log base/src/main/java/dev/example/store/Repositories.java /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/Repositories.java
+--- base/src/main/java/dev/example/store/Repositories.java	2026-09-27 13:12:05
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/Repositories.java	2026-09-27 13:14:59
+@@ -7,6 +7,7 @@
+ import org.springframework.data.domain.Sort;
+ import org.springframework.data.domain.Window;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Query;
+ 
+ interface CustomerRepository extends JpaRepository<Customer, Long> {
+ }
+@@ -20,6 +21,11 @@
+     Window<Order> findBy(ScrollPosition position, Limit limit, Sort sort);
+ 
+     List<Order> findTop20ByOrderById();
++
++    Window<Order> findByCustomerId(Long customerId, ScrollPosition position, Limit limit, Sort sort);
++
++    @Query("select o.customerId as customerId, count(o) as orders from Order o where o.customerId in :ids group by o.customerId")
++    List<Object[]> countByCustomerIds(Collection<Long> ids);
+ }
+ 
+ interface OrderLineRepository extends JpaRepository<OrderLine, Long> {
+diff -ruN --exclude=target --exclude=.check.log base/src/main/java/dev/example/store/StoreController.java /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/StoreController.java
+--- base/src/main/java/dev/example/store/StoreController.java	2026-09-27 13:12:05
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/StoreController.java	2026-09-27 13:14:59
+@@ -55,6 +55,26 @@
+         return orders.findBy(position, Limit.of(count), Sort.by("id"));
+     }
+ 
++    @QueryMapping
++    public Window<Order> customerOrders(@Argument Long customerId, ScrollSubrange subrange) {
++        if (!customers.existsById(customerId)) {
++            throw new CustomerNotFoundException(customerId);
++        }
++        ScrollPosition position = subrange.position().orElse(ScrollPosition.keyset());
++        int count = subrange.count().orElse(10);
++        return orders.findByCustomerId(customerId, position, Limit.of(count), Sort.by("id"));
++    }
++
++    @BatchMapping
++    public Map<Customer, Integer> orderCount(List<Customer> batch) {
++        Map<Long, Integer> counts = orders
++                .countByCustomerIds(batch.stream().map(Customer::getId).toList())
++                .stream()
++                .collect(Collectors.toMap(r -> (Long) r[0], r -> ((Number) r[1]).intValue()));
++        return batch.stream().collect(Collectors.toMap(
++                Function.identity(), c -> counts.getOrDefault(c.getId(), 0)));
++    }
++
+     @MutationMapping
+     public Order shipOrder(@Argument Long id) {
+         Order order = service.ship(id);
+diff -ruN --exclude=target --exclude=.check.log base/src/main/java/dev/example/store/StoreExceptionResolver.java /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/StoreExceptionResolver.java
+--- base/src/main/java/dev/example/store/StoreExceptionResolver.java	2026-09-27 13:12:05
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/java/dev/example/store/StoreExceptionResolver.java	2026-09-27 13:14:59
+@@ -14,7 +14,7 @@
+ 
+     @Override
+     protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
+-        if (ex instanceof OrderNotFoundException) {
++        if (ex instanceof OrderNotFoundException || ex instanceof CustomerNotFoundException) {
+             return GraphqlErrorBuilder.newError(env)
+                     .errorType(ErrorType.NOT_FOUND)
+                     .message(ex.getMessage())
+diff -ruN --exclude=target --exclude=.check.log base/src/main/resources/graphql/schema.graphqls /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/resources/graphql/schema.graphqls
+--- base/src/main/resources/graphql/schema.graphqls	2026-09-27 13:12:05
++++ /var/folders/h_/06_ktbkn4nsg27pdm9xf9gg40000gn/T/tmp.DjVpnlKS3o/src/main/resources/graphql/schema.graphqls	2026-09-27 13:14:59
+@@ -1,6 +1,7 @@
+ type Query {
+     order(id: ID!): Order
+     orders(first: Int, after: String, last: Int, before: String): OrderConnection!
++    customerOrders(customerId: ID!, first: Int, after: String): OrderConnection!
+ }
+ 
+ type Mutation {
+@@ -38,6 +39,7 @@
+     id: ID!
+     name: String!
+     tier: String!
++    orderCount: Int!
+     email: String
+ }
+ 
